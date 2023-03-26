@@ -8,16 +8,26 @@ import java.awt.GridLayout;
 import java.awt.Dimension;
 
 import components.Cellule.Cellule;
+import components.Rue.Rue;
 
 public class Ville extends JPanel {
     private int nbLignes = 14;
     private int nbColonnes = 20;
     private Cellule[][] grille = new Cellule[nbLignes][nbColonnes];
 
+    // public Ville() {
+    // setLayout(new GridLayout(nbLignes, nbColonnes));
+    // ajouterCellules();
+    // dessinerVille();
+    // }
+
     public Ville() {
-        setLayout(new GridLayout(nbLignes, nbColonnes));
-        ajouterCellules();
+        setLayout(null);
         dessinerVille();
+    }
+
+    public Dimension getGridDimension() {
+        return new Dimension(nbColonnes, nbLignes);
     }
 
     private Cellule getCellule(Coordonnee position) {
@@ -115,29 +125,33 @@ public class Ville extends JPanel {
     }
 
     private void dessinerVille() {
-        int x = 2;
-        int y = 0;
+        int x = 2, y = 0;
         int longueurRue = 6;
+        int longueurIntersection = 2;
 
-        ajouteRue(new Coordonnee(x, y), longueurRue, "VERTICAL", null);
+        new Rue(this, new Coordonnee(x, y), longueurRue, "VERTICAL", null);
         y += longueurRue;
-        ajouteIntersection(new Coordonnee(x, y), null);
-        ajouteRue(new Coordonnee(x + 2, y), nbColonnes - (4 + x + 2), "HORIZONTAL", null);
-        y += 2;
-        ajouteRue(new Coordonnee(x, y), longueurRue, "VERTICAL", null);
+        // ajouteIntersection(new Coordonnee(x, y), null);
+        new Rue(this, new Coordonnee(x + longueurIntersection, y), nbColonnes - (4 + x + longueurIntersection),
+                "HORIZONTAL", null);
+        y += longueurIntersection;
+        new Rue(this, new Coordonnee(x, y), longueurRue, "VERTICAL", null);
 
         x = nbColonnes - 4;
         y = 0;
 
-        ajouteRue(new Coordonnee(x, y), longueurRue, "VERTICAL", null);
+        new Rue(this, new Coordonnee(x, y), longueurRue, "VERTICAL", null);
         y += longueurRue;
-        ajouteIntersection(new Coordonnee(x, y), null);
-        y += 2;
-        ajouteRue(new Coordonnee(x, y), longueurRue, "VERTICAL", null);
+        // ajouteIntersection(new Coordonnee(x, y), null);
+        y += longueurIntersection;
+        new Rue(this, new Coordonnee(x, y), longueurRue, "VERTICAL", null);
 
-        ajouteParking(new Coordonnee(4, 1), "VERTICAL", Color.YELLOW, null);
-        ajouteParking(new Coordonnee(nbColonnes - (4 + 2), nbLignes - (4 + 1)), "VERTICAL", Color.PINK, null);
-        ajouteParking(new Coordonnee(6, longueurRue + 2), "HORIZONTAL", Color.BLUE, null);
-        ajouteParking(new Coordonnee(11, longueurRue - 2), "HORIZONTAL", Color.ORANGE, null);
+        // ajouteParking(new Coordonnee(4, 1), "VERTICAL", Color.YELLOW, null);
+        // ajouteParking(new Coordonnee(nbColonnes - (4 + 2), nbLignes - (4 + 1)),
+        // "VERTICAL", Color.PINK, null);
+        // ajouteParking(new Coordonnee(6, longueurRue + 2), "HORIZONTAL", Color.BLUE,
+        // null);
+        // ajouteParking(new Coordonnee(11, longueurRue - 2), "HORIZONTAL",
+        // Color.ORANGE, null);
     }
 }

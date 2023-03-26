@@ -9,7 +9,8 @@ import components.Ville.Ville;
 public class Ecran extends JFrame {
     public Ecran() {
         super("Conduite"); // Appel du constructeur de la classe JFrame avec un titre pour la fenêtre
-        setExtendedState(JFrame.MAXIMIZED_BOTH); // Définition de la taille de la fenêtre
+        setExtendedState(JFrame.MAXIMIZED_BOTH); // Ouvre en fullscreen
+        setSize(1100, 900); // Définition de la taille de la fenêtre
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Fermeture de la fenêtre lorsqu'on clique sur la croix
         organiser();
         setVisible(true); // Affichage de la fenêtre
