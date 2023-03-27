@@ -1,15 +1,19 @@
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Toolkit;
 
 import components.BarreHaut.BarreHaut;
 import components.Ville.Ville;
 
 public class Ecran extends JFrame {
+    private Dimension tailleEcran = Toolkit.getDefaultToolkit().getScreenSize();
+
     public Ecran() {
         super("Conduite"); // Appel du constructeur de la classe JFrame avec un titre pour la fenêtre
-        setExtendedState(JFrame.MAXIMIZED_BOTH); // Ouvre en fullscreen
         setSize(1100, 900); // Définition de la taille de la fenêtre
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Fermeture de la fenêtre lorsqu'on clique sur la croix
         organiser();
