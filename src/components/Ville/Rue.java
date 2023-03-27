@@ -1,26 +1,63 @@
 package components.Ville;
 
 import java.awt.Color;
+import java.awt.GridLayout;
+
+import javax.swing.BorderFactory;
+
+import components.Cellule.Cellule;
 
 public class Rue extends Structure {
+    private int largeur;
+    private String orientation;
+
     public Rue(Ville ville, Coordonnee startPosition, int longueur, String orientation, Coordonnee[][] connexions) {
-        super(ville, startPosition, orientation, connexions);
-        this.largeur = 2;
-        this.longueur = longueur;
-        setBackground(Color.GRAY);
+        super(ville, startPosition, connexions);
+        largeur = 2;
+        this.orientation = orientation;
+
+        if (orientation == "VERTICALE") {
+            tailleX = largeur;
+            tailleY = longueur;
+        } else if (orientation == "HORIZONTALE") {
+            tailleX = longueur;
+            tailleY = largeur;
+        } else
+            throw new IllegalArgumentException(
+                    "L'orientation de la rue doit être soit \"VERTICALE\" ou \"HORIZONTALE\"");
+
+        setLayout(new GridLayout(tailleY, tailleX));
+        peupler();
         ville.add(this);
     }
 
-    public double multipleDimension(int nbCellules, String dimension) {
-        double multiple;
-        if (dimension == "LARGEUR")
-            multiple = nbCellules / ville.getGridDimension().getWidth();
-        else if (dimension == "LONGUEUR")
-            multiple = nbCellules / ville.getGridDimension().getHeight();
-        else
-            throw new IllegalArgumentException(
-                    "Le parametre \"dimension\" doit être donné une valeur \"LARGEUR\" ou \"LONGUEUR\"");
-        return multiple;
+    private void peupler() {
+        Coordonnee position;
+        for (int y = 0; y < tailleY; y++) {
+            for (int x = 0; x < tailleX; x++) {
+                position = new Coordonnee(getStartIndexCellX() + x, getStartIndexCellY() + y);
+                Cellule cellule = new Cellule(position);
+
+                int tailleBordureCell = 2;
+                int cellBordureDroite = 0, cellBordureGauche = 0, cellBordureHaut = 0, cellBordureBas = 0;
+                if (orientation == "VERTICALE" && y % 2 == 0) {
+                    if (x == 0)
+                        cellBordureDroite = tailleBordureCell;
+                    else if (x == 1)
+                        cellBordureGauche = tailleBordureCell;
+                } else if (orientation == "HORIZONTALE" && x % 2 == 0) {
+                    if (y == 0)
+                        cellBordureBas = tailleBordureCell;
+                    else if (y == 1)
+                        cellBordureHaut = tailleBordureCell;
+                }
+
+                cellule.setBorder(BorderFactory.createMatteBorder(cellBordureHaut, cellBordureGauche, cellBordureBas,
+                        cellBordureDroite,
+                        Color.WHITE));
+                add(cellule);
+            }
+        }
     }
 
     // private void ajouteRue() {

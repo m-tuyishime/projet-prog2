@@ -7,23 +7,30 @@ import java.awt.event.ComponentEvent;
 
 public class Structure extends JPanel {
     protected Ville ville;
-    protected int largeur;
-    protected int longueur;
-    protected int startX;
-    protected int startY;
-    protected String orientation;
+    protected int tailleX;
+    protected int tailleY;
+    protected int startIndexCellX;
+    protected int startIndexCellY;
 
-    public Structure(Ville ville, Coordonnee startPosition, String orientation, Coordonnee[][] connexions) {
+    public Structure(Ville ville, Coordonnee startPosition, Coordonnee[][] connexions) {
         this.ville = ville;
-        startX = startPosition.getX();
-        startY = startPosition.getY();
-        if (orientation == null)
-            this.orientation = "VERTICAL";
-        else
-            this.orientation = orientation;
+        startIndexCellX = startPosition.getX();
+        startIndexCellY = startPosition.getY();
 
         dessinerStructure();
 
+    }
+
+    public int getTailleY() {
+        return tailleY;
+    }
+
+    public int getStartIndexCellX() {
+        return startIndexCellX;
+    }
+
+    public int getStartIndexCellY() {
+        return startIndexCellY;
     }
 
     private double multipleDimension(int nbCellules, String dimension) {
@@ -43,22 +50,10 @@ public class Structure extends JPanel {
         ville.addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {
-                double widthMultiple;
-                double heightMultiple;
-                if (orientation == "VERTICAL") {
-                    widthMultiple = multipleDimension(largeur, "LARGEUR");
-                    heightMultiple = multipleDimension(longueur, "LONGUEUR");
-                } else if (orientation == "HORIZONTAL") {
-                    widthMultiple = multipleDimension(longueur, "LARGEUR");
-                    heightMultiple = multipleDimension(largeur, "LONGUEUR");
-                } else
-                    throw new IllegalArgumentException(
-                            "L'orientation doit être soit \"VERTICAL\" ou \"HORIZONTAL\"");
-
-                int width = (int) (ville.getWidth() * widthMultiple);
-                int height = (int) (ville.getHeight() * heightMultiple);
-                int startLayoutX = (int) (ville.getWidth() * multipleDimension(startX, "LARGEUR"));
-                int startLayoutY = (int) (ville.getHeight() * multipleDimension(startY, "LONGUEUR"));
+                int width = (int) (ville.getWidth() * multipleDimension(tailleX, "LARGEUR"));
+                int height = (int) (ville.getHeight() * multipleDimension(tailleY, "LONGUEUR"));
+                int startLayoutX = (int) (ville.getWidth() * multipleDimension(startIndexCellX, "LARGEUR"));
+                int startLayoutY = (int) (ville.getHeight() * multipleDimension(startIndexCellY, "LONGUEUR"));
                 setBounds(startLayoutX, startLayoutY, width, height);
             }
         });

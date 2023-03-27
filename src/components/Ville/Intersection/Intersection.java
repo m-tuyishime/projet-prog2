@@ -14,12 +14,13 @@ import components.Ville.Structure;
 import components.Ville.Ville;
 
 public class Intersection extends Structure {
+    private int largeur = 2;
     private JPanel arrierePlan = new JPanel();
 
     public Intersection(Ville vile, Coordonnee startPosition, Coordonnee[][] connexions) {
-        super(vile, startPosition, null, connexions);
-        largeur = 2;
-        longueur = largeur;
+        super(vile, startPosition, connexions);
+        tailleX = largeur;
+        tailleY = largeur;
 
         setLayout(null);
 
@@ -42,12 +43,12 @@ public class Intersection extends Structure {
             }
         });
 
-        arrierePlan.setLayout(new GridLayout(longueur, largeur));
+        arrierePlan.setLayout(new GridLayout(largeur, largeur));
 
         Coordonnee position;
-        for (int l = 0; l < longueur; l++) {
+        for (int l = 0; l < largeur; l++) {
             for (int c = 0; c < largeur; c++) {
-                position = new Coordonnee(startX + c, startY + l);
+                position = new Coordonnee(c, l);
                 Cellule cellule = new Cellule(position);
                 arrierePlan.add(cellule, l, c);
             }
