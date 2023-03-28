@@ -43,12 +43,12 @@ public class Ville extends JPanel {
         y += longueurIntersection;
         new Rue(this, new Coordonnee(x, y), longueurRue, "VERTICALE", null);
 
-        // ajouteParking(new Coordonnee(4, 1), "VERTICALE", Color.YELLOW, null);
-        // ajouteParking(new Coordonnee(nbColonnes - (4 + 2), nbLignes - (4 + 1)),
-        // "VERTICALE", Color.PINK, null);
-        // ajouteParking(new Coordonnee(6, longueurRue + 2), "HORIZONTAL", Color.BLUE,
-        // null);
-        // ajouteParking(new Coordonnee(11, longueurRue - 2), "HORIZONTAL",
-        // Color.ORANGE, null);
+        new Parking(this, new Coordonnee(4, 1), "VERTICALE", Color.YELLOW, null);
+        new Parking(this, new Coordonnee(nbColonnes - (4 + 2), nbLignes - (4 + 1)),
+                "VERTICALE", Color.PINK, null);
+        new Parking(this, new Coordonnee(6, longueurRue + 2), "HORIZONTALE", Color.BLUE,
+                null);
+        new Parking(this, new Coordonnee(11, longueurRue - 2), "HORIZONTALE",
+                Color.ORANGE, null);
     }
 }

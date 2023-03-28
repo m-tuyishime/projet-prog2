@@ -14,8 +14,10 @@ public class Parking extends Structure {
             Coordonnee[][] connexions) {
         super(ville, startPosition, null);
         this.couleur = couleur;
-
+        setOrientation(orientation);
+        setLargeLongueur(largeur, longueur);
         setLayout(new GridLayout(getTailleY(), getTailleX()));
+        construire();
     }
 
     @Override

@@ -23,7 +23,7 @@ public class Intersection extends Structure {
 
         setLayout(null);
 
-        int largeurBorder = 5;
+        int largeurBorder = 4;
         setBorder(BorderFactory.createMatteBorder(largeurBorder, largeurBorder, largeurBorder, largeurBorder,
                 Color.WHITE));
 
