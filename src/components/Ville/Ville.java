@@ -5,7 +5,6 @@ import javax.swing.JPanel;
 import java.awt.Color;
 import java.awt.Dimension;
 
-import components.Cellule.Cellule;
 import components.Ville.Intersection.Intersection;
 
 public class Ville extends JPanel {

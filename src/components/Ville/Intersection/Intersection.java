@@ -34,6 +34,9 @@ public class Intersection extends Structure {
     protected void peupler() {
         peuplerArrierePlan();
         add(arrierePlan);
+        FeuxCirculation feuxCirculation = new FeuxCirculation(this);
+        add(feuxCirculation);
+        setComponentZOrder(feuxCirculation, 0);
     }
 
     private void peuplerArrierePlan() {

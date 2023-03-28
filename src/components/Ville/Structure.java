@@ -2,7 +2,6 @@ package components.Ville;
 
 import javax.swing.JPanel;
 
-import java.awt.GridLayout;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 
