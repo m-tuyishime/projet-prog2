@@ -2,35 +2,74 @@ package components.Ville;
 
 import javax.swing.JPanel;
 
+import java.awt.GridLayout;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 
 public class Structure extends JPanel {
-    protected Ville ville;
-    protected int tailleX;
-    protected int tailleY;
-    protected int startIndexCellX;
-    protected int startIndexCellY;
+    private Ville ville;
+    private int tailleX, tailleY;
+    private int startIndexCellX, startIndexCellY;
+    private String orientation;
+    private int largeur, longueur;
 
-    public Structure(Ville ville, Coordonnee startPosition, Coordonnee[][] connexions) {
+    protected Structure(Ville ville, Coordonnee startPosition, Coordonnee[][] connexions) {
         this.ville = ville;
         startIndexCellX = startPosition.getX();
         startIndexCellY = startPosition.getY();
-
-        dessinerStructure();
-
     }
 
-    public int getTailleY() {
+    protected int getTailleY() {
         return tailleY;
     }
 
-    public int getStartIndexCellX() {
+    protected int getTailleX() {
+        return tailleX;
+    }
+
+    protected int getStartIndexCellX() {
         return startIndexCellX;
     }
 
-    public int getStartIndexCellY() {
+    protected int getStartIndexCellY() {
         return startIndexCellY;
+    }
+
+    protected String getOrientation() {
+        return orientation;
+    }
+
+    protected void setOrientation(String orientation) {
+        this.orientation = orientation;
+    }
+
+    protected void setLargeLongueur(int largeur, int longueur) {
+        this.largeur = largeur;
+        this.longueur = longueur;
+        setTailles();
+    }
+
+    protected void peupler() {
+
+    }
+
+    private void setTailles() {
+        if (orientation == "VERTICALE") {
+            tailleX = largeur;
+            tailleY = longueur;
+        } else if (orientation == "HORIZONTALE") {
+            tailleX = longueur;
+            tailleY = largeur;
+        } else
+            throw new IllegalArgumentException(
+                    "L'orientation doit être soit \"VERTICALE\" ou \"HORIZONTALE\"");
+    }
+
+    protected void construire() {
+        dessinerStructure();
+
+        peupler();
+        ville.add(this);
     }
 
     private double multipleDimension(int nbCellules, String dimension) {

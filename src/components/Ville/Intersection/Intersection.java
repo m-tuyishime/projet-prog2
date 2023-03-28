@@ -14,23 +14,26 @@ import components.Ville.Structure;
 import components.Ville.Ville;
 
 public class Intersection extends Structure {
-    private int largeur = 2;
     private JPanel arrierePlan = new JPanel();
 
     public Intersection(Ville vile, Coordonnee startPosition, Coordonnee[][] connexions) {
         super(vile, startPosition, connexions);
-        tailleX = largeur;
-        tailleY = largeur;
+        setOrientation("VERTICALE");
+        setLargeLongueur(2, 2);
 
         setLayout(null);
-
-        peuplerArrierePlan();
-        add(arrierePlan);
 
         int largeurBorder = 5;
         setBorder(BorderFactory.createMatteBorder(largeurBorder, largeurBorder, largeurBorder, largeurBorder,
                 Color.WHITE));
-        ville.add(this);
+
+        construire();
+    }
+
+    @Override
+    protected void peupler() {
+        peuplerArrierePlan();
+        add(arrierePlan);
     }
 
     private void peuplerArrierePlan() {
@@ -43,14 +46,15 @@ public class Intersection extends Structure {
             }
         });
 
-        arrierePlan.setLayout(new GridLayout(largeur, largeur));
+        arrierePlan.setLayout(new GridLayout(getTailleY(), getTailleX()));
 
         Coordonnee position;
-        for (int l = 0; l < largeur; l++) {
-            for (int c = 0; c < largeur; c++) {
-                position = new Coordonnee(c, l);
+        for (int y = 0; y < getTailleY(); y++) {
+            for (int x = 0; x < getTailleX(); x++) {
+                position = new Coordonnee(getStartIndexCellX() + x, getStartIndexCellY() +
+                        y);
                 Cellule cellule = new Cellule(position);
-                arrierePlan.add(cellule, l, c);
+                arrierePlan.add(cellule, y, x);
             }
         }
     }

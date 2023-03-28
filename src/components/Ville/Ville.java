@@ -11,7 +11,6 @@ import components.Ville.Intersection.Intersection;
 public class Ville extends JPanel {
     private int nbLignes = 14;
     private int nbColonnes = 20;
-    private Cellule[][] grille = new Cellule[nbLignes][nbColonnes];
 
     public Ville() {
         setLayout(null);
@@ -20,37 +19,6 @@ public class Ville extends JPanel {
 
     public Dimension getGridDimension() {
         return new Dimension(nbColonnes, nbLignes);
-    }
-
-    public Cellule getCellule(Coordonnee position) {
-        return grille[position.getY()][position.getX()];
-    }
-
-    public void setCellule(Coordonnee position, Cellule nouvCellule) {
-        grille[position.getX()][position.getY()] = nouvCellule;
-        add(nouvCellule, position.getX(), position.getY());
-        nouvCellule.setPreferredSize(new Dimension(Integer.MAX_VALUE, Integer.MAX_VALUE));
-    }
-
-    private void ajouteParking(Coordonnee startPosition, String orientation, Color couleur, Coordonnee[][] connexions) {
-        int startX = startPosition.getX();
-        int startY = startPosition.getY();
-        Coordonnee position;
-
-        for (int l = 0; l < 4; l++) {
-            for (int c = 0; c < 2; c++) {
-                if (orientation == "VERTICAL")
-                    position = new Coordonnee(startX + c, startY + l);
-                else if (orientation == "HORIZONTAL")
-                    position = new Coordonnee(startX + l, startY + c);
-                else
-                    throw new IllegalArgumentException(
-                            "L'orientation de la rue doit être soit \"VERTICAL\" ou \"HORIZONTAL\"");
-
-                Cellule cellule = getCellule(position);
-                cellule.setBackground(couleur);
-            }
-        }
     }
 
     private void dessinerVille() {
