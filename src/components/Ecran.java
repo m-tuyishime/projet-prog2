@@ -1,3 +1,5 @@
+package components;
+
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
@@ -7,10 +9,16 @@ import java.awt.GridBagLayout;
 import java.awt.Toolkit;
 
 import components.BarreHaut.BarreHaut;
-import components.Ville.Ville;
+import memoire.Memoire;
 
 public class Ecran extends JFrame {
+    // Définition du layout de la fenêtre avec le GridBagLayout
+    private GridBagLayout grid = new GridBagLayout();
     private Dimension tailleEcran = Toolkit.getDefaultToolkit().getScreenSize();
+    // Création d'un nouveau JPanel pour la barre du haut avec la classe BarreHaut
+    JPanel barreHautPanel = new BarreHaut();
+    // Recherche du JPanel avec la classe Ville
+    JPanel villePanel = Memoire.getVille();
 
     public Ecran() {
         super("Conduite"); // Appel du constructeur de la classe JFrame avec un titre pour la fenêtre
@@ -21,14 +29,7 @@ public class Ecran extends JFrame {
     }
 
     private void organiser() {
-        // Définition du layout de la fenêtre avec le GridBagLayout
-        GridBagLayout grid = new GridBagLayout();
         setLayout(grid);
-
-        // Création d'un nouveau JPanel pour la barre du haut avec la classe BarreHaut
-        JPanel barreHautPanel = new BarreHaut();
-        // Création d'un nouveau JPanel pour la ville avec la classe Ville
-        JPanel villePanel = new Ville();
 
         // Création des contraintes pour la première ligne
         GridBagConstraints barreHautConstraints = new GridBagConstraints();
