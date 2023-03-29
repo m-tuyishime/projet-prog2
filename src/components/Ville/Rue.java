@@ -6,6 +6,7 @@ import java.awt.GridLayout;
 import javax.swing.BorderFactory;
 
 import components.Cellule.Cellule;
+import components.Cellule.CelluleRue;
 
 public class Rue extends Structure {
     public Rue(Ville ville, Coordonnee startPosition, int longueur, String orientation, Coordonnee[][] connexions) {
@@ -22,7 +23,7 @@ public class Rue extends Structure {
         for (int y = 0; y < getTailleY(); y++) {
             for (int x = 0; x < getTailleX(); x++) {
                 position = new Coordonnee(getStartIndexCellX() + x, getStartIndexCellY() + y);
-                Cellule cellule = new Cellule(position);
+                CelluleRue cellule = new CelluleRue(position, 0);
 
                 int tailleBordureCell = 2;
                 int cellBordureDroite = 0, cellBordureGauche = 0, cellBordureHaut = 0, cellBordureBas = 0;
@@ -42,6 +43,7 @@ public class Rue extends Structure {
                         cellBordureDroite,
                         Color.WHITE));
                 add(cellule);
+                getVille().setCellule(position, cellule);
             }
         }
     }

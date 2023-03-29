@@ -18,6 +18,10 @@ public class Structure extends JPanel {
         startIndexCellY = startPosition.getY();
     }
 
+    protected Ville getVille() {
+        return ville;
+    }
+
     protected int getTailleY() {
         return tailleY;
     }

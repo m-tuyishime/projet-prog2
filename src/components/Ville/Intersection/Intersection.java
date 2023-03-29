@@ -9,6 +9,7 @@ import javax.swing.JPanel;
 import javax.swing.BorderFactory;
 
 import components.Cellule.Cellule;
+import components.Cellule.CelluleIntersection;
 import components.Ville.Coordonnee;
 import components.Ville.Structure;
 import components.Ville.Ville;
@@ -16,8 +17,8 @@ import components.Ville.Ville;
 public class Intersection extends Structure {
     private JPanel arrierePlan = new JPanel();
 
-    public Intersection(Ville vile, Coordonnee startPosition, Coordonnee[][] connexions) {
-        super(vile, startPosition, connexions);
+    public Intersection(Ville ville, Coordonnee startPosition, Coordonnee[][] connexions) {
+        super(ville, startPosition, connexions);
         setOrientation("VERTICALE");
         setLargeLongueur(2, 2);
 
@@ -56,8 +57,9 @@ public class Intersection extends Structure {
             for (int x = 0; x < getTailleX(); x++) {
                 position = new Coordonnee(getStartIndexCellX() + x, getStartIndexCellY() +
                         y);
-                Cellule cellule = new Cellule(position);
+                CelluleIntersection cellule = new CelluleIntersection(position, 0);
                 arrierePlan.add(cellule, y, x);
+                getVille().setCellule(position, cellule);
             }
         }
     }

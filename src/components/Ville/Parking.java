@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.GridLayout;
 
 import components.Cellule.Cellule;
+import components.Cellule.CelluleParking;
 
 public class Parking extends Structure {
     private int longueur = 4;
@@ -28,9 +29,9 @@ public class Parking extends Structure {
             for (int x = 0; x < getTailleX(); x++) {
                 position = new Coordonnee(getStartIndexCellX() + x, getStartIndexCellY() + y);
 
-                Cellule cellule = new Cellule(position);
-                cellule.setBackground(couleur);
+                CelluleParking cellule = new CelluleParking(position, couleur);
                 add(cellule);
+                getVille().setCellule(position, cellule);
             }
         }
     }

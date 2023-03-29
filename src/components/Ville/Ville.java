@@ -5,19 +5,29 @@ import javax.swing.JPanel;
 import java.awt.Color;
 import java.awt.Dimension;
 
+import components.Cellule.Cellule;
 import components.Ville.Intersection.Intersection;
 
 public class Ville extends JPanel {
-    private int nbLignes = 14;
-    private int nbColonnes = 20;
+    private static int nbLignes = 14;
+    private static int nbColonnes = 20;
+    private Cellule[][] cellules = new Cellule[nbLignes][nbColonnes];
 
     public Ville() {
         setLayout(null);
         dessinerVille();
     }
 
-    public Dimension getGridDimension() {
+    public static Dimension getGridDimension() {
         return new Dimension(nbColonnes, nbLignes);
+    }
+
+    public Cellule getCellule(Coordonnee position) {
+        return cellules[position.getY()][position.getX()];
+    }
+
+    public void setCellule(Coordonnee position, Cellule cellule) {
+        cellules[position.getY()][position.getX()] = cellule;
     }
 
     private void dessinerVille() {
