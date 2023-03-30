@@ -2,7 +2,6 @@ package components.Ville.Intersection;
 
 import javax.swing.JPanel;
 
-import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -13,7 +12,6 @@ import java.awt.event.ComponentListener;
 
 public class Feu extends JPanel {
     private Color couleur = Color.RED;
-    private Color couleurBordure = Color.WHITE;
 
     public Feu() {
         setOpaque(false);
@@ -25,16 +23,19 @@ public class Feu extends JPanel {
         });
     }
 
-    public void setCouleur(String state) {
+    public void setState(String state) {
         switch (state) {
             case "GO":
                 couleur = Color.GREEN;
+                break;
+            case "SLOW":
+                couleur = Color.YELLOW;
                 break;
             case "STOP":
                 couleur = Color.RED;
                 break;
             default:
-                throw new IllegalArgumentException("Le state doit être soit \"GO\" ou \"STOP\"");
+                throw new IllegalArgumentException("Le state doit être soit \"GO\", \"SLOW\" ou \"STOP\"");
         }
         paintComponent(getGraphics());
     }
@@ -53,8 +54,6 @@ public class Feu extends JPanel {
         g2d.setColor(couleur);
         g2d.fillOval(x, y, diameter, diameter);
 
-        g2d.setColor(couleurBordure);
-        g2d.setStroke(new BasicStroke(30)); // Set the border thickness
         g2d.drawOval(x, y, diameter, diameter);
     }
 }

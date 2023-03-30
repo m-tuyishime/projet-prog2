@@ -2,19 +2,39 @@ package components.Ville.Intersection;
 
 import javax.swing.JPanel;
 
+import components.Cellule.CelluleIntersection;
+
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class FeuxCirculation extends JPanel {
+    private int vitesseFeux = Intersection.vitesseMax * Intersection.maxRotations * 2;
+    private CelluleIntersection[][] cellules;
     private Feu feuHaut = new Feu();
     private Feu feuGauche = new Feu();
     private Feu feuDroite = new Feu();
     private Feu feuBas = new Feu();
+    private boolean goX = false;
+    private Timer minuteur = new Timer();
+    private TimerTask tache = new TimerTask() {
+        public void run() {
+            if (goX) {
+                goX = false;
+                goX();
+            } else {
+                goX = true;
+                goY();
+            }
+        }
+    };
 
     public FeuxCirculation(Intersection intersection) {
+        cellules = intersection.getCellules();
         // Met les feux de circulation au millieu de l'intersection
         intersection.addComponentListener((ComponentListener) new ComponentAdapter() {
             @Override
@@ -32,6 +52,43 @@ public class FeuxCirculation extends JPanel {
         setOpaque(false);
         setLayout(new GridBagLayout());
         peupler();
+        minuteur.schedule(tache, 1000, vitesseFeux);
+    }
+
+    public void goY() {
+        cellules[0][1].setGoStatus(false);
+        cellules[1][0].setGoStatus(false);
+        feuDroite.setState("SLOW");
+        feuGauche.setState("SLOW");
+        minuteur.schedule(new TimerTask() {
+            public void run() {
+                feuDroite.setState("STOP");
+                feuGauche.setState("STOP");
+
+                cellules[0][0].setGoStatus(true);
+                cellules[1][1].setGoStatus(true);
+                feuHaut.setState("GO");
+                feuBas.setState("GO");
+            }
+        }, Intersection.maxRotations * 1000);
+    }
+
+    public void goX() {
+        cellules[0][0].setGoStatus(false);
+        cellules[1][1].setGoStatus(false);
+        feuHaut.setState("SLOW");
+        feuBas.setState("SLOW");
+        minuteur.schedule(new TimerTask() {
+            public void run() {
+                feuHaut.setState("STOP");
+                feuBas.setState("STOP");
+
+                cellules[0][1].setGoStatus(true);
+                cellules[1][0].setGoStatus(true);
+                feuDroite.setState("GO");
+                feuGauche.setState("GO");
+            }
+        }, Intersection.maxRotations * 1000);
     }
 
     public void peupler() {

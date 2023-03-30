@@ -14,13 +14,18 @@ import components.Ville.Structure;
 import components.Ville.Ville;
 
 public class Intersection extends Structure {
-    private JPanel arrierePlan = new JPanel();
+    public static final int vitesseMax = 2000;
+    public static final int maxRotations = 3;
+    public static final int largeur = 2;
+    private JPanel arrierePlan;
+    private CelluleIntersection[][] cellules = new CelluleIntersection[largeur][largeur];
 
     public Intersection(Ville ville, Coordonnee startPosition) {
         super(ville, startPosition);
-        setOrientation("VERTICALE");
-        setLargeLongueur(2, 2);
+        arrierePlan = new JPanel();
 
+        setOrientation("VERTICALE");
+        setLargeLongueur(largeur, largeur);
         setLayout(null);
 
         int largeurBorder = 4;
@@ -28,6 +33,10 @@ public class Intersection extends Structure {
                 Color.WHITE));
 
         construire();
+    }
+
+    public CelluleIntersection[][] getCellules() {
+        return cellules;
     }
 
     @Override
@@ -58,6 +67,7 @@ public class Intersection extends Structure {
                         y);
                 CelluleIntersection cellule = new CelluleIntersection(this, position, 0);
                 arrierePlan.add(cellule, y, x);
+                cellules[y][x] = cellule;
                 Ville.setCellule(position, cellule);
             }
         }
