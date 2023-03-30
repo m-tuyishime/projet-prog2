@@ -8,12 +8,33 @@ public class Memoire {
     // Taux de recherche d'un stationnement
     private static double tauxRecherche = 0.5;
 
+    // Si les voitures bougent
+    private static boolean circulation = false;
+
+    private static boolean reset = true;
+
     public static Ville getVille() {
         return ville;
     }
 
     public static double getTauxRecherche() {
         return tauxRecherche;
+    }
+
+    public static boolean getCirculation() {
+        return circulation;
+    }
+
+    public static boolean getResetStatus() {
+        return reset;
+    }
+
+    public static void setResetStatus(boolean status) {
+        reset = status;
+    }
+
+    public static void setCirculation(boolean status) {
+        circulation = status;
     }
 
     public static void setTauxRecherche(double nouvTaux) {

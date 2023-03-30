@@ -12,7 +12,7 @@ public class Structure extends JPanel {
     private String orientation;
     private int largeur, longueur;
 
-    protected Structure(Ville ville, Coordonnee startPosition, Coordonnee[][] connexions) {
+    protected Structure(Ville ville, Coordonnee startPosition) {
         this.ville = ville;
         startIndexCellX = startPosition.getX();
         startIndexCellY = startPosition.getY();
@@ -78,9 +78,9 @@ public class Structure extends JPanel {
     private double multipleDimension(int nbCellules, String dimension) {
         double multiple;
         if (dimension == "LARGEUR")
-            multiple = nbCellules / ville.getGridDimension().getWidth();
+            multiple = nbCellules / Ville.getGridDimension().getWidth();
         else if (dimension == "LONGUEUR")
-            multiple = nbCellules / ville.getGridDimension().getHeight();
+            multiple = nbCellules / Ville.getGridDimension().getHeight();
         else
             throw new IllegalArgumentException(
                     "Le parametre \"dimension\" doit être donné une valeur \"LARGEUR\" ou \"LONGUEUR\"");

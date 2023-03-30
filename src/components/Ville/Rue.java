@@ -5,12 +5,11 @@ import java.awt.GridLayout;
 
 import javax.swing.BorderFactory;
 
-import components.Cellule.Cellule;
 import components.Cellule.CelluleRue;
 
 public class Rue extends Structure {
-    public Rue(Ville ville, Coordonnee startPosition, int longueur, String orientation, Coordonnee[][] connexions) {
-        super(ville, startPosition, connexions);
+    public Rue(Ville ville, Coordonnee startPosition, int longueur, String orientation) {
+        super(ville, startPosition);
         setOrientation(orientation);
         setLargeLongueur(2, longueur);
         setLayout(new GridLayout(getTailleY(), getTailleX()));
@@ -23,7 +22,7 @@ public class Rue extends Structure {
         for (int y = 0; y < getTailleY(); y++) {
             for (int x = 0; x < getTailleX(); x++) {
                 position = new Coordonnee(getStartIndexCellX() + x, getStartIndexCellY() + y);
-                CelluleRue cellule = new CelluleRue(position, 0);
+                CelluleRue cellule = new CelluleRue(this, position, 0);
 
                 int tailleBordureCell = 2;
                 int cellBordureDroite = 0, cellBordureGauche = 0, cellBordureHaut = 0, cellBordureBas = 0;
@@ -43,33 +42,8 @@ public class Rue extends Structure {
                         cellBordureDroite,
                         Color.WHITE));
                 add(cellule);
-                getVille().setCellule(position, cellule);
+                Ville.setCellule(position, cellule);
             }
         }
     }
-
-    // private void ajouteRue() {
-    // int startX = startPosition.getX();
-    // int startY = startPosition.getY();
-    // Coordonnee position;
-
-    // for (int l = 0; l < longueur; l++) {
-    // for (int c = 0; c < 2; c++) {
-    // if (orientation == "VERTICAL")
-    // position = new Coordonnee(startX + c, startY + l);
-    // else if (orientation == "HORIZONTAL")
-    // position = new Coordonnee(startX + l, startY + c);
-    // else
-    // throw new IllegalArgumentException(
-    // "L'orientation de la rue doit être soit \"VERTICAL\" ou \"HORIZONTAL\"");
-
-    // Cellule cellule = getCellule(position);
-    // if (l % 2 == 0 && c != 0 && orientation == "VERTICAL")
-    // cellule.setBorder(BorderFactory.createMatteBorder(0, 5, 0, 0, Color.WHITE));
-    // if (l % 2 == 0 && c != 0 && orientation == "HORIZONTAL")
-    // cellule.setBorder(BorderFactory.createMatteBorder(0, 0, 5, 0, Color.WHITE));
-    // cellule.setBackground(Color.GRAY);
-    // }
-    // }
-    // }
 }

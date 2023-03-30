@@ -3,10 +3,11 @@ package components.Cellule;
 import java.awt.Color;
 
 import components.Ville.Coordonnee;
+import components.Ville.Structure;
 
 public class CelluleParking extends Cellule {
-    public CelluleParking(Coordonnee position, Color couleur) {
-        super(position, 0);
+    public CelluleParking(Structure structure, Coordonnee position, Color couleur) {
+        super(structure, position, 0);
         setBackground(couleur);
     }
 }

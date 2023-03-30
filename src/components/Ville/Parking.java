@@ -3,7 +3,6 @@ package components.Ville;
 import java.awt.Color;
 import java.awt.GridLayout;
 
-import components.Cellule.Cellule;
 import components.Cellule.CelluleParking;
 
 public class Parking extends Structure {
@@ -11,9 +10,8 @@ public class Parking extends Structure {
     private int largeur = 2;
     private Color couleur;
 
-    public Parking(Ville ville, Coordonnee startPosition, String orientation, Color couleur,
-            Coordonnee[][] connexions) {
-        super(ville, startPosition, null);
+    public Parking(Ville ville, Coordonnee startPosition, String orientation, Color couleur) {
+        super(ville, startPosition);
         this.couleur = couleur;
         setOrientation(orientation);
         setLargeLongueur(largeur, longueur);
@@ -29,9 +27,9 @@ public class Parking extends Structure {
             for (int x = 0; x < getTailleX(); x++) {
                 position = new Coordonnee(getStartIndexCellX() + x, getStartIndexCellY() + y);
 
-                CelluleParking cellule = new CelluleParking(position, couleur);
+                CelluleParking cellule = new CelluleParking(this, position, couleur);
                 add(cellule);
-                getVille().setCellule(position, cellule);
+                Ville.setCellule(position, cellule);
             }
         }
     }

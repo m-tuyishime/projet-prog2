@@ -11,7 +11,7 @@ import components.Ville.Intersection.Intersection;
 public class Ville extends JPanel {
     private static int nbLignes = 14;
     private static int nbColonnes = 20;
-    private Cellule[][] cellules = new Cellule[nbLignes][nbColonnes];
+    private static Cellule[][] cellules = new Cellule[nbLignes][nbColonnes];
 
     public Ville() {
         setLayout(null);
@@ -22,11 +22,11 @@ public class Ville extends JPanel {
         return new Dimension(nbColonnes, nbLignes);
     }
 
-    public Cellule getCellule(Coordonnee position) {
+    public static Cellule getCellule(Coordonnee position) {
         return cellules[position.getY()][position.getX()];
     }
 
-    public void setCellule(Coordonnee position, Cellule cellule) {
+    public static void setCellule(Coordonnee position, Cellule cellule) {
         cellules[position.getY()][position.getX()] = cellule;
     }
 
@@ -35,29 +35,28 @@ public class Ville extends JPanel {
         int longueurRue = 6;
         int longueurIntersection = 2;
 
-        new Rue(this, new Coordonnee(x, y), longueurRue, "VERTICALE", null);
+        new Rue(this, new Coordonnee(x, y), longueurRue, "VERTICALE");
         y += longueurRue;
-        new Intersection(this, new Coordonnee(x, y), null);
+        new Intersection(this, new Coordonnee(x, y));
         new Rue(this, new Coordonnee(x + longueurIntersection, y), nbColonnes - (4 + x + longueurIntersection),
-                "HORIZONTALE", null);
+                "HORIZONTALE");
         y += longueurIntersection;
-        new Rue(this, new Coordonnee(x, y), longueurRue, "VERTICALE", null);
+        new Rue(this, new Coordonnee(x, y), longueurRue, "VERTICALE");
 
         x = nbColonnes - 4;
         y = 0;
 
-        new Rue(this, new Coordonnee(x, y), longueurRue, "VERTICALE", null);
+        new Rue(this, new Coordonnee(x, y), longueurRue, "VERTICALE");
         y += longueurRue;
-        new Intersection(this, new Coordonnee(x, y), null);
+        new Intersection(this, new Coordonnee(x, y));
         y += longueurIntersection;
-        new Rue(this, new Coordonnee(x, y), longueurRue, "VERTICALE", null);
+        new Rue(this, new Coordonnee(x, y), longueurRue, "VERTICALE");
 
-        new Parking(this, new Coordonnee(4, 1), "VERTICALE", Color.YELLOW, null);
+        new Parking(this, new Coordonnee(4, 1), "VERTICALE", Color.YELLOW);
         new Parking(this, new Coordonnee(nbColonnes - (4 + 2), nbLignes - (4 + 1)),
-                "VERTICALE", Color.PINK, null);
-        new Parking(this, new Coordonnee(6, longueurRue + 2), "HORIZONTALE", Color.BLUE,
-                null);
+                "VERTICALE", Color.PINK);
+        new Parking(this, new Coordonnee(6, longueurRue + 2), "HORIZONTALE", Color.BLUE);
         new Parking(this, new Coordonnee(11, longueurRue - 2), "HORIZONTALE",
-                Color.ORANGE, null);
+                Color.ORANGE);
     }
 }
