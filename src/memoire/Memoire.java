@@ -1,5 +1,6 @@
 package memoire;
 
+import components.Ville.Coordonnee;
 import components.Ville.Ville;
 
 public class Memoire {
@@ -12,6 +13,8 @@ public class Memoire {
     private static boolean circulation = false;
 
     private static boolean reset = true;
+
+    private static Coordonnee[] startCoordonnees = {};
 
     public static Ville getVille() {
         return ville;

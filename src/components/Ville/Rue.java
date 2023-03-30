@@ -21,22 +21,38 @@ public class Rue extends Structure {
         Coordonnee position;
         for (int y = 0; y < getTailleY(); y++) {
             for (int x = 0; x < getTailleX(); x++) {
-                position = new Coordonnee(getStartIndexCellX() + x, getStartIndexCellY() + y);
-                CelluleRue cellule = new CelluleRue(this, position, 0);
+                int direction = 0;
 
                 int tailleBordureCell = 2;
                 int cellBordureDroite = 0, cellBordureGauche = 0, cellBordureHaut = 0, cellBordureBas = 0;
-                if (getOrientation() == "VERTICALE" && y % 2 == 0) {
-                    if (x == 0)
-                        cellBordureDroite = tailleBordureCell;
-                    else if (x == 1)
-                        cellBordureGauche = tailleBordureCell;
-                } else if (getOrientation() == "HORIZONTALE" && x % 2 == 0) {
-                    if (y == 0)
-                        cellBordureBas = tailleBordureCell;
-                    else if (y == 1)
-                        cellBordureHaut = tailleBordureCell;
+                if (getOrientation() == "VERTICALE") {
+                    if (x == 0) {
+                        direction = 1;
+
+                        if (y % 2 == 0)
+                            cellBordureDroite = tailleBordureCell;
+                    } else if (x == 1) {
+                        direction = -1;
+
+                        if (y % 2 == 0)
+                            cellBordureGauche = tailleBordureCell;
+                    }
+                } else if (getOrientation() == "HORIZONTALE") {
+                    if (y == 0) {
+                        direction = -1;
+
+                        if (x % 2 == 0)
+                            cellBordureBas = tailleBordureCell;
+                    } else if (y == 1) {
+                        direction = 1;
+
+                        if (x % 2 == 0)
+                            cellBordureHaut = tailleBordureCell;
+                    }
                 }
+
+                position = new Coordonnee(getStartIndexCellX() + x, getStartIndexCellY() + y);
+                CelluleRue cellule = new CelluleRue(this, position, direction);
 
                 cellule.setBorder(BorderFactory.createMatteBorder(cellBordureHaut, cellBordureGauche, cellBordureBas,
                         cellBordureDroite,
