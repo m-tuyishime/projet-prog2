@@ -37,6 +37,7 @@ public class Voiture extends JPanel {
     private Coordonnee positionActuelle;
     private int xActuelle;
     private int yActuelle;
+    private int derniereDirection;
 
     public Voiture() {
         nombreVoitures++;
@@ -144,12 +145,10 @@ public class Voiture extends JPanel {
             xActuelle += cellActuelle.getDirection();
 
         positionActuelle = new Coordonnee(xActuelle, yActuelle);
+        derniereDirection = cellActuelle.getDirection();
     }
 
     private void circulationIntersection() {
-        System.out.println(positionActuelle.getX() + " " + positionActuelle.getY());
-        System.out.println(cellActuelle.getPosition().getX() + " " + cellActuelle.getPosition().getY());
-
         // Decide quel direction aller 0 = gauche, 1 = continue, 2 = droite
         int randomDirection;
         if (dansIntersection)
@@ -157,19 +156,16 @@ public class Voiture extends JPanel {
         else
             randomDirection = random.nextInt(3);
 
-        if (uTurn || nombreRotations == Intersection.maxRotations) {
+        if (uTurn) {
+            positionActuelle = new Coordonnee(xActuelle, yActuelle - derniereDirection);
+            tourner = true;
+        } else if (nombreRotations == Intersection.maxRotations) {
             Cellule[] cellulesAutour = {
-                    Ville.getCellule(new Coordonnee(xActuelle - 1, yActuelle)),
-                    Ville.getCellule(new Coordonnee(xActuelle, yActuelle + 1)),
-                    Ville.getCellule(new Coordonnee(xActuelle + 1, yActuelle)),
-                    Ville.getCellule(new Coordonnee(xActuelle, yActuelle - 1)),
+                    Ville.getCellule(new Coordonnee(xActuelle + derniereDirection, yActuelle)),
+                    Ville.getCellule(new Coordonnee(xActuelle, yActuelle + derniereDirection))
             };
             for (Cellule cellule : cellulesAutour) {
-                if (cellule != null &&
-                        cellule instanceof CelluleRue &&
-                        (cellule.getPosition() != new Coordonnee(xActuelle - cellule.getDirection(), yActuelle)
-                                || cellule.getPosition() != new Coordonnee(xActuelle,
-                                        yActuelle + cellule.getDirection()))) {
+                if (cellule != null && cellule instanceof CelluleRue) {
                     Coordonnee nouvPosition = cellule.getPosition();
                     if (nouvPosition.getX() != positionActuelle.getX())
                         tourner = true;
@@ -180,15 +176,14 @@ public class Voiture extends JPanel {
         } else if (randomDirection == 0) {
             if (!dansIntersection)
                 uTurn = true;
-            xActuelle--;
+            xActuelle += derniereDirection;
             tourner = true;
             positionActuelle = new Coordonnee(xActuelle, yActuelle);
         } else if (randomDirection == 1) {
-            yActuelle++;
+            yActuelle += derniereDirection;
             positionActuelle = new Coordonnee(xActuelle, yActuelle);
         } else if (randomDirection == 2) {
-            uTurn = true;
-            xActuelle++;
+            xActuelle -= derniereDirection;
             tourner = true;
             positionActuelle = new Coordonnee(xActuelle, yActuelle);
         }
@@ -204,18 +199,24 @@ public class Voiture extends JPanel {
             setPreferredSize(new Dimension(30, 20));
             nombreRotations++;
             tourner = false;
-        }
+        } else
+            setPreferredSize(new Dimension(20, 30));
+
+        update();
+    }
+
+    private void update() {
+        cellActuelle.validate();
+        cellActuelle.repaint();
     }
 
     private void ajouter() {
         cellActuelle.add(this);
-        cellActuelle.validate();
-        cellActuelle.repaint();
+        update();
     }
 
     private void enlever() {
         cellActuelle.remove(this);
-        cellActuelle.validate();
-        cellActuelle.repaint();
+        update();
     }
 }
