@@ -15,7 +15,6 @@ import components.Ville.Ville;
 
 public class Intersection extends Structure {
     public static final int vitesseMax = 2000;
-    public static final int maxRotations = 2;
     public static final int largeur = 2;
     private JPanel arrierePlan;
     private CelluleIntersection[][] cellules = new CelluleIntersection[largeur][largeur];

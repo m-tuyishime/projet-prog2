@@ -28,4 +28,18 @@ public class Coordonnee {
     public int getY() {
         return positionY;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this) {
+            return true;
+        }
+
+        if (!(obj instanceof Coordonnee)) {
+            return false;
+        }
+
+        Coordonnee coordonnee = (Coordonnee) obj;
+        return positionX == coordonnee.getX() && positionY == coordonnee.getY();
+    }
 }

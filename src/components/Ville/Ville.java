@@ -9,6 +9,11 @@ import components.Cellule.Cellule;
 import components.Ville.Intersection.Intersection;
 
 public class Ville extends JPanel {
+    // Si les voitures bougent
+    private static boolean circulation = true;
+    private static boolean reset = false;
+    private static int nombreVoitures = 0;
+
     private static int nbLignes = 14;
     private static int nbColonnes = 20;
     private static Cellule[][] cellules = new Cellule[nbLignes][nbColonnes];
@@ -47,6 +52,30 @@ public class Ville extends JPanel {
         }
     }
 
+    public static int getNombreVoitures() {
+        return nombreVoitures;
+    }
+
+    public static boolean getResetStatus() {
+        return reset;
+    }
+
+    public static boolean getCirculationStatus() {
+        return circulation;
+    }
+
+    public static void setNombreVoitures(int nombre) {
+        nombreVoitures = nombre;
+    }
+
+    public static void setResetStatus(boolean status) {
+        reset = status;
+    }
+
+    public static void setCirculationStatus(boolean status) {
+        circulation = status;
+    }
+
     public static void setCellule(Coordonnee position, Cellule cellule) {
         try {
             cellules[position.getY()][position.getX()] = cellule;
@@ -59,7 +88,7 @@ public class Ville extends JPanel {
         boolean trouvee = false;
 
         for (int i = 0; i < sorties.length; i++) {
-            if (sorties[i] == position) {
+            if (sorties[i].equals(position)) {
                 trouvee = true;
                 break;
             }

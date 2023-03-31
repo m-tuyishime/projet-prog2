@@ -13,7 +13,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class FeuxCirculation extends JPanel {
-    private int vitesseFeux = Intersection.vitesseMax * Intersection.maxRotations * 2;
+    private int vitesseFeux = Intersection.vitesseMax * 8;
     private CelluleIntersection[][] cellules;
     private Feu feuHaut = new Feu();
     private Feu feuGauche = new Feu();
@@ -70,7 +70,7 @@ public class FeuxCirculation extends JPanel {
                 feuHaut.setState("GO");
                 feuBas.setState("GO");
             }
-        }, (Intersection.maxRotations + 1) * 1000);
+        }, (4) * 1000);
     }
 
     public void goX() {
@@ -88,7 +88,7 @@ public class FeuxCirculation extends JPanel {
                 feuDroite.setState("GO");
                 feuGauche.setState("GO");
             }
-        }, (Intersection.maxRotations + 1) * 1000);
+        }, (4) * 1000);
     }
 
     public void peupler() {
