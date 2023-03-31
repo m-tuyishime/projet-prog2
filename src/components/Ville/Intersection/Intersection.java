@@ -15,13 +15,14 @@ import components.Ville.Ville;
 
 public class Intersection extends Structure {
     public static final int vitesseMax = 2000;
-    public static final int maxRotations = 3;
+    public static final int maxRotations = 2;
     public static final int largeur = 2;
     private JPanel arrierePlan;
     private CelluleIntersection[][] cellules = new CelluleIntersection[largeur][largeur];
 
     public Intersection(Ville ville, Coordonnee startPosition) {
         super(ville, startPosition);
+        setVitesseMax(vitesseMax);
         arrierePlan = new JPanel();
 
         setOrientation("VERTICALE");
@@ -66,7 +67,7 @@ public class Intersection extends Structure {
                 position = new Coordonnee(getStartIndexCellX() + x, getStartIndexCellY() +
                         y);
                 CelluleIntersection cellule = new CelluleIntersection(this, position, 0);
-                arrierePlan.add(cellule, y, x);
+                arrierePlan.add(cellule);
                 cellules[y][x] = cellule;
                 Ville.setCellule(position, cellule);
             }

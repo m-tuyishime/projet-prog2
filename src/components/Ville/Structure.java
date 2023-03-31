@@ -11,6 +11,7 @@ public class Structure extends JPanel {
     private int startIndexCellX, startIndexCellY;
     private String orientation;
     private int largeur, longueur;
+    private int vitesseMax = 1000;
 
     protected Structure(Ville ville, Coordonnee startPosition) {
         this.ville = ville;
@@ -38,8 +39,16 @@ public class Structure extends JPanel {
         return startIndexCellY;
     }
 
-    protected String getOrientation() {
+    public String getOrientation() {
         return orientation;
+    }
+
+    public int getVitesseMax() {
+        return vitesseMax;
+    }
+
+    protected void setVitesseMax(int vitesseMax) {
+        this.vitesseMax = vitesseMax;
     }
 
     protected void setOrientation(String orientation) {

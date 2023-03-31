@@ -70,7 +70,7 @@ public class FeuxCirculation extends JPanel {
                 feuHaut.setState("GO");
                 feuBas.setState("GO");
             }
-        }, Intersection.maxRotations * 1000);
+        }, (Intersection.maxRotations + 1) * 1000);
     }
 
     public void goX() {
@@ -88,7 +88,7 @@ public class FeuxCirculation extends JPanel {
                 feuDroite.setState("GO");
                 feuGauche.setState("GO");
             }
-        }, Intersection.maxRotations * 1000);
+        }, (Intersection.maxRotations + 1) * 1000);
     }
 
     public void peupler() {

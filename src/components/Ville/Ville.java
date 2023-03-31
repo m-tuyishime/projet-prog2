@@ -13,6 +13,23 @@ public class Ville extends JPanel {
     private static int nbColonnes = 20;
     private static Cellule[][] cellules = new Cellule[nbLignes][nbColonnes];
 
+    public static final Coordonnee[] entrees = {
+            new Coordonnee(2, 0),
+            new Coordonnee(0, 7),
+            new Coordonnee(3, 13),
+            new Coordonnee(16, 0),
+            new Coordonnee(19, 6),
+            new Coordonnee(17, 13)
+    };
+    public static final Coordonnee[] sorties = {
+            new Coordonnee(3, 0),
+            new Coordonnee(0, 6),
+            new Coordonnee(2, 13),
+            new Coordonnee(17, 0),
+            new Coordonnee(19, 7),
+            new Coordonnee(16, 13)
+    };
+
     public Ville() {
         setLayout(null);
         dessinerVille();
@@ -23,40 +40,52 @@ public class Ville extends JPanel {
     }
 
     public static Cellule getCellule(Coordonnee position) {
-        return cellules[position.getY()][position.getX()];
+        try {
+            return cellules[position.getY()][position.getX()];
+        } catch (ArrayIndexOutOfBoundsException e) {
+            return null;
+        }
     }
 
     public static void setCellule(Coordonnee position, Cellule cellule) {
-        cellules[position.getY()][position.getX()] = cellule;
+        try {
+            cellules[position.getY()][position.getX()] = cellule;
+        } catch (ArrayIndexOutOfBoundsException e) {
+            System.out.println("La position de cellule donnée ne fait pas partie de la grille");
+        }
+    }
+
+    public static boolean estSortie(Coordonnee position) {
+        boolean trouvee = false;
+
+        for (int i = 0; i < sorties.length; i++) {
+            if (sorties[i] == position) {
+                trouvee = true;
+                break;
+            }
+        }
+
+        return trouvee;
     }
 
     private void dessinerVille() {
-        int x = 2, y = 0;
-        int longueurRue = 6;
-        int longueurIntersection = 2;
+        new Rue(this, new Coordonnee(2, 0), 6, "VERTICALE");
+        new Rue(this, new Coordonnee(0, 6), 2, "HORIZONTALE");
+        new Rue(this, new Coordonnee(4, 6), 12, "HORIZONTALE");
+        new Rue(this, new Coordonnee(2, 8), 6, "VERTICALE");
 
-        new Rue(this, new Coordonnee(x, y), longueurRue, "VERTICALE");
-        y += longueurRue;
-        new Intersection(this, new Coordonnee(x, y));
-        new Rue(this, new Coordonnee(x + longueurIntersection, y), nbColonnes - (4 + x + longueurIntersection),
-                "HORIZONTALE");
-        y += longueurIntersection;
-        new Rue(this, new Coordonnee(x, y), longueurRue, "VERTICALE");
+        new Rue(this, new Coordonnee(16, 0), 6, "VERTICALE");
+        new Rue(this, new Coordonnee(18, 6), 2, "HORIZONTALE");
+        new Rue(this, new Coordonnee(16, 8), 6, "VERTICALE");
 
-        x = nbColonnes - 4;
-        y = 0;
+        new Intersection(this, new Coordonnee(2, 6));
+        new Intersection(this, new Coordonnee(16, 6));
 
-        new Rue(this, new Coordonnee(x, y), longueurRue, "VERTICALE");
-        y += longueurRue;
-        new Intersection(this, new Coordonnee(x, y));
-        y += longueurIntersection;
-        new Rue(this, new Coordonnee(x, y), longueurRue, "VERTICALE");
-
-        new Parking(this, new Coordonnee(4, 1), "VERTICALE", Color.YELLOW);
-        new Parking(this, new Coordonnee(nbColonnes - (4 + 2), nbLignes - (4 + 1)),
+        new Parking(this, new Coordonnee(4, 1), "VERTICALE", new Color(123, 50, 250));
+        new Parking(this, new Coordonnee(18, 9),
                 "VERTICALE", Color.PINK);
-        new Parking(this, new Coordonnee(6, longueurRue + 2), "HORIZONTALE", Color.BLUE);
-        new Parking(this, new Coordonnee(11, longueurRue - 2), "HORIZONTALE",
-                Color.ORANGE);
+        new Parking(this, new Coordonnee(6, 8), "HORIZONTALE", Color.BLUE);
+        new Parking(this, new Coordonnee(11, 4), "HORIZONTALE", Color.ORANGE);
     }
+
 }

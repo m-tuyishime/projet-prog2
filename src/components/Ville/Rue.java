@@ -8,7 +8,6 @@ import javax.swing.BorderFactory;
 import components.Cellule.CelluleRue;
 
 public class Rue extends Structure {
-    private int vitesseMax;
 
     public Rue(Ville ville, Coordonnee startPosition, int longueur, String orientation) {
         super(ville, startPosition);
