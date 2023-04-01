@@ -47,7 +47,6 @@ public class Voiture extends JPanel {
         } catch (InterruptedException e) {
             System.out.println(e.getMessage());
         }
-        new Voiture();
     }
 
     public static void setTauxRecherche(double nouvTaux) {
@@ -73,7 +72,6 @@ public class Voiture extends JPanel {
 
     private void circule() throws InterruptedException {
         tourne();
-
         cellActuelle = Ville.getCellule(positionActuelle);
         structure = cellActuelle.getStructure();
         xActuelle = positionActuelle.getX();
@@ -84,32 +82,31 @@ public class Voiture extends JPanel {
 
         Thread.sleep(structure.getVitesseMax());
 
-        if (Ville.getResetStatus() || fini) {
-            enlever();
-            Ville.setNombreVoitures(Ville.getNombreVoitures() - 1);
-            return;
-        }
+        // if (Ville.getResetStatus() || fini) {
+        // enlever();
+        // Ville.setNombreVoitures(Ville.getNombreVoitures() - 1);
+        // return;
+        // }
 
         while (!Ville.getCirculationStatus()) {
             Thread.sleep(500);
         }
 
-        if (chercher && parking != null) {
-            circulationParking(parking);
-        } else {
-            // checks
-            try {
+        if (!Ville.estSortie(positionActuelle)) {
+            if (chercher && parking != null) {
+                circulationParking(parking);
+            } else {
                 if (structure instanceof Rue)
                     circulationRue();
                 else if (structure instanceof Intersection)
                     circulationIntersection();
-            } catch (IllegalArgumentException e) {
-            } finally {
-                enlever();
-                if (Ville.estSortie(positionActuelle))
-                    fini = true;
-            }
 
+                enlever();
+                circule();
+            }
+        } else {
+            positionActuelle = Ville.getEntree(positionActuelle);
+            enlever();
             circule();
         }
     }

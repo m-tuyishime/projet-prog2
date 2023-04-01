@@ -87,9 +87,9 @@ public class Structure extends JPanel {
     private double multipleDimension(int nbCellules, String dimension) {
         double multiple;
         if (dimension == "LARGEUR")
-            multiple = nbCellules / Ville.getGridDimension().getWidth();
+            multiple = nbCellules / (double) Ville.nbColonnes;
         else if (dimension == "LONGUEUR")
-            multiple = nbCellules / Ville.getGridDimension().getHeight();
+            multiple = nbCellules / (double) Ville.nbLignes;
         else
             throw new IllegalArgumentException(
                     "Le parametre \"dimension\" doit être donné une valeur \"LARGEUR\" ou \"LONGUEUR\"");

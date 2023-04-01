@@ -14,8 +14,8 @@ public class Ville extends JPanel {
     private static boolean reset = false;
     private static int nombreVoitures = 0;
 
-    private static int nbLignes = 14;
-    private static int nbColonnes = 20;
+    public static final int nbLignes = 14;
+    public static final int nbColonnes = 20;
     private static Cellule[][] cellules = new Cellule[nbLignes][nbColonnes];
 
     public static final Coordonnee[] entrees = {
@@ -40,10 +40,6 @@ public class Ville extends JPanel {
         dessinerVille();
     }
 
-    public static Dimension getGridDimension() {
-        return new Dimension(nbColonnes, nbLignes);
-    }
-
     public static Cellule getCellule(Coordonnee position) {
         try {
             return cellules[position.getY()][position.getX()];
@@ -62,6 +58,22 @@ public class Ville extends JPanel {
 
     public static boolean getCirculationStatus() {
         return circulation;
+    }
+
+    public static Coordonnee getEntree(Coordonnee sortie) {
+        Cellule cellule = getCellule(sortie);
+        Structure structure = cellule.getStructure();
+        if (structure.getOrientation() == "HORIZONTALE") {
+            int x = nbColonnes - 1;
+            if (sortie.getX() == x)
+                x = 0;
+            return new Coordonnee(x, sortie.getY());
+        } else {
+            int y = nbLignes - 1;
+            if (sortie.getY() == y)
+                y = 0;
+            return new Coordonnee(sortie.getX(), y);
+        }
     }
 
     public static void setNombreVoitures(int nombre) {
