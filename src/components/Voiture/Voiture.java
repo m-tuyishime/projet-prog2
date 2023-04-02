@@ -2,30 +2,32 @@ package components.Voiture;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.util.ArrayList;
 import java.util.Random;
 
+import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 
 import components.Cellule.Cellule;
 import components.Cellule.CelluleIntersection;
-import components.Cellule.CelluleRue;
 import components.Ville.Coordonnee;
 import components.Ville.Parking;
 import components.Ville.Rue;
 import components.Ville.Structure;
 import components.Ville.Ville;
 import components.Ville.Intersection.Intersection;
+import serveur.Serveur;
 
 public class Voiture extends JPanel {
     private static Random random = new Random();
     // Taux de recherche d'un stationnement
-    private static double tauxRecherche = 0.5;
+    private static double tauxRecherche = 1;
     private int nombreRotations = 0;
     private boolean chercher = false;
     private boolean uTurn = false;
     private boolean dansIntersection = false;
     private boolean horizontale = false;
-    private boolean fini = false;
+    private Serveur serveur = new Serveur();
 
     private Cellule cellActuelle;
     private Structure structure;
@@ -33,6 +35,7 @@ public class Voiture extends JPanel {
     private int xActuelle;
     private int yActuelle;
     private int derniereDirection;
+    private ArrayList<Structure> cheminParking;
 
     public Voiture() {
         Ville.setNombreVoitures(Ville.getNombreVoitures() + 1);
@@ -53,12 +56,29 @@ public class Voiture extends JPanel {
         tauxRecherche = nouvTaux;
     }
 
-    private void startChercher() {
+    private void chercherParking() {
+        if (!chercher) {
+            if (tauxRecherche <= 0.0) {
+                return;
+            } else if (tauxRecherche >= 1.0) {
 
-    }
+            } else {
+                int randomInt = random.nextInt(100);
+                if (randomInt < tauxRecherche * 100) {
 
-    private void stopChercher() {
+                } else {
+                    return;
+                }
+            }
 
+            chercher = true;
+            cheminParking = serveur.getCheminParking(positionActuelle, derniereDirection);
+
+            Color couleurBordure = serveur.getCouleurParking();
+            int largeurBorder = 3;
+            setBorder(BorderFactory.createMatteBorder(largeurBorder, largeurBorder, largeurBorder, largeurBorder,
+                    couleurBordure));
+        }
     }
 
     private void premierArrangement() {
@@ -72,7 +92,23 @@ public class Voiture extends JPanel {
 
     private void circule() throws InterruptedException {
         tourne();
-        cellActuelle = Ville.getCellule(positionActuelle);
+
+        Cellule cellSuivante = Ville.getCellule(positionActuelle);
+        CelluleIntersection cellIntersection = null;
+        if (cellSuivante instanceof CelluleIntersection)
+            cellIntersection = (CelluleIntersection) cellSuivante;
+
+        while (cellSuivante.estOccupe()
+                || (cellIntersection != null && !cellIntersection.estGo() && !dansIntersection)) {
+            Thread.sleep(500);
+            update();
+        }
+
+        chercherParking();
+
+        enlever();
+
+        cellActuelle = cellSuivante;
         structure = cellActuelle.getStructure();
         xActuelle = positionActuelle.getX();
         yActuelle = positionActuelle.getY();
@@ -82,11 +118,11 @@ public class Voiture extends JPanel {
 
         Thread.sleep(structure.getVitesseMax());
 
-        // if (Ville.getResetStatus() || fini) {
-        // enlever();
-        // Ville.setNombreVoitures(Ville.getNombreVoitures() - 1);
-        // return;
-        // }
+        if (Ville.getResetStatus()) {
+            enlever();
+            Ville.setNombreVoitures(Ville.getNombreVoitures() - 1);
+            return;
+        }
 
         while (!Ville.getCirculationStatus()) {
             Thread.sleep(500);
@@ -95,46 +131,57 @@ public class Voiture extends JPanel {
         if (!Ville.estSortie(positionActuelle)) {
             if (chercher && parking != null) {
                 circulationParking(parking);
-            } else {
-                if (structure instanceof Rue)
-                    circulationRue();
-                else if (structure instanceof Intersection)
-                    circulationIntersection();
-
-                enlever();
-                circule();
             }
+
+            if (structure instanceof Rue)
+                circulationRue();
+            else if (structure instanceof Intersection)
+                circulationIntersection();
+
+            circule();
+
         } else {
             positionActuelle = Ville.getEntree(positionActuelle);
-            enlever();
             circule();
         }
     }
 
     private void circulationParking(Parking parking) throws InterruptedException {
+        enlever();
         nombreRotations = 0;
         uTurn = false;
-        ajouter();
-        Thread.sleep(structure.getVitesseMax());
+
         horizontale = !horizontale;
         tourne();
-        paintComponent(getGraphics());
+
+        ajouter();
         Thread.sleep(structure.getVitesseMax());
         enlever();
         parking.addOccupation();
-        stopChercher();
+        chercher = false;
         Thread.sleep(random.nextInt(Parking.maxTemps));
-        parking.removeOccupation();
+
+        while (cellActuelle.estOccupe()) {
+            Thread.sleep(500);
+        }
+
         ajouter();
+        parking.removeOccupation();
         Thread.sleep(structure.getVitesseMax());
 
         horizontale = !horizontale;
-        circule();
+
+        tourne();
+        enlever();
+        ajouter();
     }
 
     private void circulationRue() {
         nombreRotations = 0;
-        uTurn = false;
+        if (!chercher || !structure.equals(cheminParking.get(cheminParking.size() - 1)))
+            uTurn = false;
+        else
+            uTurn = true;
 
         if (structure.getOrientation() == "VERTICALE")
             yActuelle += cellActuelle.getDirection();
@@ -153,13 +200,30 @@ public class Voiture extends JPanel {
         else
             randomDirection = random.nextInt(3);
 
-        if (uTurn) {
+        if (uTurn && dansIntersection) {
+            // uTurn assigne par circulationIntersection
             randomDirection = 1;
             changerDirection();
+        } else if (uTurn) {
+            // uTurn assigne par circulationRue
+            randomDirection = 0;
         } else if (nombreRotations == 1) {
             if (!horizontale)
                 changerDirection();
             randomDirection = 1;
+        }
+
+        if (chercher) {
+            int cheminIndex = cheminParking.indexOf(structure);
+            Structure structureSuivante = cheminParking.get(cheminIndex + 1);
+            int direction = getDirectionSuivante(structureSuivante);
+
+            if (direction != -1)
+                randomDirection = direction;
+            else if (!dansIntersection && !uTurn)
+                randomDirection = 1;
+            else
+                randomDirection = 0;
         }
 
         if (randomDirection == 0) {
@@ -200,6 +264,46 @@ public class Voiture extends JPanel {
             dansIntersection = false;
     }
 
+    private int getDirectionSuivante(Structure destination) {
+        int compte = 3;
+        Coordonnee positionActuelle = new Coordonnee(this.positionActuelle.getX(), this.positionActuelle.getY());
+        int directionSuivante = -1;
+
+        for (int direction = 0; direction < compte; direction++) {
+            int yActuelle = this.yActuelle;
+            int xActuelle = this.xActuelle;
+
+            if (direction == 0) {
+                if (horizontale)
+                    yActuelle -= derniereDirection;
+                else
+                    xActuelle += derniereDirection;
+
+                positionActuelle = new Coordonnee(xActuelle, yActuelle);
+            } else if (direction == 1) {
+                if (horizontale)
+                    xActuelle += derniereDirection;
+                else
+                    yActuelle += derniereDirection;
+
+                positionActuelle = new Coordonnee(xActuelle, yActuelle);
+            } else if (direction == 2) {
+                if (horizontale)
+                    yActuelle += derniereDirection;
+                else
+                    xActuelle -= derniereDirection;
+
+                positionActuelle = new Coordonnee(xActuelle, yActuelle);
+            }
+            Cellule celluleSuivante = Ville.getCellule(positionActuelle);
+            if (celluleSuivante != null && celluleSuivante.getStructure().equals(destination)) {
+                directionSuivante = direction;
+                break;
+            }
+        }
+        return directionSuivante;
+    }
+
     private void tourne() {
         if (horizontale) {
             setPreferredSize(new Dimension(30, 20));
@@ -221,13 +325,16 @@ public class Voiture extends JPanel {
         cellActuelle.repaint();
     }
 
-    private void ajouter() {
+    private void ajouter() throws InterruptedException {
+        cellActuelle.setOccupe(true);
         cellActuelle.add(this);
         update();
     }
 
     private void enlever() {
         cellActuelle.remove(this);
+        cellActuelle.setOccupe(false);
         update();
     }
+
 }

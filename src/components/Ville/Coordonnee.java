@@ -4,10 +4,14 @@ public class Coordonnee {
     private int positionX;
     private int positionY;
 
+    public Coordonnee(Coordonnee coordonnee) {
+        new Coordonnee(coordonnee.getX(), getY());
+    }
+
     public Coordonnee(int x, int y) {
-        if (x > Ville.nbColonnes)
+        if (x >= Ville.nbColonnes)
             throw new IllegalArgumentException("La variable x dépasse la largeur de la ville");
-        else if (y > Ville.nbLignes)
+        else if (y >= Ville.nbLignes)
             throw new IllegalArgumentException("La variable y dépasse la longueur de la ville");
 
         if (x < 0 || y < 0)

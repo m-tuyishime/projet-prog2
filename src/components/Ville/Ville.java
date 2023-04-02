@@ -3,7 +3,6 @@ package components.Ville;
 import javax.swing.JPanel;
 
 import java.awt.Color;
-import java.awt.Dimension;
 
 import components.Cellule.Cellule;
 import components.Ville.Intersection.Intersection;
@@ -61,6 +60,8 @@ public class Ville extends JPanel {
     }
 
     public static Coordonnee getEntree(Coordonnee sortie) {
+        if (!estSortie(sortie))
+            throw new IllegalArgumentException("La coordonnée donnée n'est pas une sortie");
         Cellule cellule = getCellule(sortie);
         Structure structure = cellule.getStructure();
         if (structure.getOrientation() == "HORIZONTALE") {
@@ -123,9 +124,9 @@ public class Ville extends JPanel {
         new Intersection(this, new Coordonnee(16, 6));
 
         new Parking(this, new Coordonnee(4, 1), "VERTICALE", new Color(123, 50, 250));
-        new Parking(this, new Coordonnee(18, 9),
+        new Parking(this, new Coordonnee(14, 10),
                 "VERTICALE", Color.PINK);
-        new Parking(this, new Coordonnee(6, 8), "HORIZONTALE", Color.BLUE);
+        // new Parking(this, new Coordonnee(8, 8), "HORIZONTALE", Color.BLUE);
         new Parking(this, new Coordonnee(11, 4), "HORIZONTALE", Color.ORANGE);
     }
 

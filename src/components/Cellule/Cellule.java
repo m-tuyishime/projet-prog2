@@ -60,10 +60,15 @@ public class Cellule extends JPanel {
 
     public void setParking(Parking parking) {
         this.parking = parking;
+        structure.addParking(parking);
     }
 
     public void setOccupe(boolean occupeStatus) {
         this.occupeStatus = occupeStatus;
+        if (occupeStatus)
+            structure.addOccupation();
+        else
+            structure.removeOccupation();
     }
 
     private void setDirection(int direction) {

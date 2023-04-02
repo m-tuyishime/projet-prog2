@@ -13,7 +13,7 @@ public class Parking extends Structure {
     private int largeur = 2;
     private Color couleur;
     private static int capacite = 4;
-    private int occupation = 0;
+    private int direction = 0;
 
     public Parking(Ville ville, Coordonnee startPosition, String orientation, Color couleur) {
         super(ville, startPosition);
@@ -24,12 +24,12 @@ public class Parking extends Structure {
         construire();
     }
 
-    public void addOccupation() {
-        occupation++;
+    public Color getCouleur() {
+        return couleur;
     }
 
-    public void removeOccupation() {
-        occupation--;
+    public int getDirection() {
+        return direction;
     }
 
     @Override
@@ -46,16 +46,22 @@ public class Parking extends Structure {
                 add(cellule);
                 Ville.setCellule(position, cellule);
 
-                Cellule[] cellulesAutour = {
-                        Ville.getCellule(new Coordonnee(xActuelle - 1, yActuelle)),
-                        Ville.getCellule(new Coordonnee(xActuelle, yActuelle + 1)),
-                        Ville.getCellule(new Coordonnee(xActuelle + 1, yActuelle)),
-                        Ville.getCellule(new Coordonnee(xActuelle, yActuelle - 1))
-                };
+                Cellule[] cellulesAutour = new Cellule[4];
+                if (xActuelle - 1 > 0)
+                    cellulesAutour[0] = Ville.getCellule(new Coordonnee(xActuelle - 1, yActuelle));
+                if (yActuelle + 1 < Ville.nbLignes)
+                    cellulesAutour[1] = Ville.getCellule(new Coordonnee(xActuelle, yActuelle + 1));
+                if (xActuelle + 1 < Ville.nbColonnes)
+                    cellulesAutour[2] = Ville.getCellule(new Coordonnee(xActuelle + 1, yActuelle));
+                if (yActuelle - 1 < 0)
+                    cellulesAutour[3] = Ville.getCellule(new Coordonnee(xActuelle, yActuelle - 1));
+
                 for (Cellule celluleAutour : cellulesAutour) {
                     if ((celluleAutour != null) && (celluleAutour.getStructure() instanceof Rue
-                            || celluleAutour.getStructure() instanceof Intersection))
+                            || celluleAutour.getStructure() instanceof Intersection)) {
                         celluleAutour.setParking(this);
+                        direction = celluleAutour.getDirection();
+                    }
                 }
             }
         }

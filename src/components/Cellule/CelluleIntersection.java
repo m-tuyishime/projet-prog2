@@ -6,7 +6,7 @@ import components.Ville.Coordonnee;
 import components.Ville.Structure;
 
 public class CelluleIntersection extends Cellule {
-    private boolean goStatus;
+    private boolean goStatus = false;
 
     public CelluleIntersection(Structure structure, Coordonnee position, int direction) {
         super(structure, position, direction);
@@ -14,7 +14,7 @@ public class CelluleIntersection extends Cellule {
         setBackground(Color.GRAY);
     }
 
-    public boolean getGoStatus() {
+    public boolean estGo() {
         return goStatus;
     }
 

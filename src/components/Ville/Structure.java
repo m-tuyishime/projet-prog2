@@ -4,6 +4,7 @@ import javax.swing.JPanel;
 
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.util.ArrayList;
 
 public class Structure extends JPanel {
     private Ville ville;
@@ -12,6 +13,8 @@ public class Structure extends JPanel {
     private String orientation;
     private int largeur, longueur;
     private int vitesseMax = 1000;
+    private ArrayList<Parking> parkings = new ArrayList<Parking>();
+    protected int occupation = 0;
 
     protected Structure(Ville ville, Coordonnee startPosition) {
         this.ville = ville;
@@ -23,19 +26,19 @@ public class Structure extends JPanel {
         return ville;
     }
 
-    protected int getTailleY() {
+    public int getTailleY() {
         return tailleY;
     }
 
-    protected int getTailleX() {
+    public int getTailleX() {
         return tailleX;
     }
 
-    protected int getStartIndexCellX() {
+    public int getStartIndexCellX() {
         return startIndexCellX;
     }
 
-    protected int getStartIndexCellY() {
+    public int getStartIndexCellY() {
         return startIndexCellY;
     }
 
@@ -45,6 +48,31 @@ public class Structure extends JPanel {
 
     public int getVitesseMax() {
         return vitesseMax;
+    }
+
+    public ArrayList<Parking> getParkings() {
+        return parkings;
+    }
+
+    public int getLongueur() {
+        return longueur;
+    }
+
+    public int getOccupation() {
+        return occupation;
+    }
+
+    public void addOccupation() {
+        occupation++;
+    }
+
+    public void removeOccupation() {
+        occupation--;
+    }
+
+    public void addParking(Parking parking) {
+        if (!parkings.contains(parking))
+            parkings.add(parking);
     }
 
     protected void setVitesseMax(int vitesseMax) {
@@ -96,6 +124,18 @@ public class Structure extends JPanel {
         return multiple;
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+        Structure other = (Structure) obj;
+        return this.tailleX == other.tailleX
+                && this.tailleY == other.tailleY
+                && this.startIndexCellX == other.startIndexCellX
+                && this.startIndexCellY == other.startIndexCellY;
+    }
+
     private void dessinerStructure() {
         // Calcule les bounds quand le JFrame est redimensionné
         ville.addComponentListener(new ComponentAdapter() {
@@ -110,4 +150,5 @@ public class Structure extends JPanel {
         });
 
     }
+
 }
