@@ -20,6 +20,7 @@ public class Structure extends JPanel {
         this.ville = ville;
         startIndexCellX = startPosition.getX();
         startIndexCellY = startPosition.getY();
+
     }
 
     protected Ville getVille() {
@@ -148,7 +149,6 @@ public class Structure extends JPanel {
                 setBounds(startLayoutX, startLayoutY, width, height);
             }
         });
-
     }
 
 }

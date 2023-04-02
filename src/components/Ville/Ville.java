@@ -36,6 +36,7 @@ public class Ville extends JPanel {
 
     public Ville() {
         setLayout(null);
+
         dessinerVille();
     }
 
@@ -126,7 +127,7 @@ public class Ville extends JPanel {
         new Parking(this, new Coordonnee(4, 1), "VERTICALE", new Color(123, 50, 250));
         new Parking(this, new Coordonnee(14, 10),
                 "VERTICALE", Color.PINK);
-        // new Parking(this, new Coordonnee(8, 8), "HORIZONTALE", Color.BLUE);
+        new Parking(this, new Coordonnee(0, 10), "VERTICALE", Color.BLUE);
         new Parking(this, new Coordonnee(11, 4), "HORIZONTALE", Color.ORANGE);
     }
 

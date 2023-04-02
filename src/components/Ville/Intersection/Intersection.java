@@ -2,8 +2,8 @@ package components.Ville.Intersection;
 
 import java.awt.Color;
 import java.awt.GridLayout;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.swing.JPanel;
 import javax.swing.BorderFactory;
@@ -45,18 +45,30 @@ public class Intersection extends Structure {
         add(arrierePlan);
         FeuxCirculation feuxCirculation = new FeuxCirculation(this);
         add(feuxCirculation);
+        TimerTask task = new TimerTask() {
+            @Override
+            public void run() {
+                feuxCirculation.repaint();
+            }
+        };
+
+        Timer timer = new Timer();
+        timer.schedule(task, 100, 10);
         setComponentZOrder(feuxCirculation, 0);
     }
 
     private void peuplerArrierePlan() {
-        addComponentListener(new ComponentAdapter() {
+        TimerTask task = new TimerTask() {
             @Override
-            public void componentResized(ComponentEvent e) {
+            public void run() {
                 int largeurContenu = getWidth() - getInsets().left - getInsets().right;
                 int longueurContenu = getHeight() - getInsets().top - getInsets().bottom;
                 arrierePlan.setBounds(getInsets().left, getInsets().top, largeurContenu, longueurContenu);
             }
-        });
+        };
+
+        Timer timer = new Timer();
+        timer.schedule(task, 0, 10);
 
         arrierePlan.setLayout(new GridLayout(getTailleY(), getTailleX()));
 

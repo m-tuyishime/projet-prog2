@@ -52,6 +52,10 @@ public class Voiture extends JPanel {
         }
     }
 
+    public static double getTauxRecherche() {
+        return tauxRecherche;
+    }
+
     public static void setTauxRecherche(double nouvTaux) {
         tauxRecherche = nouvTaux;
     }
@@ -79,6 +83,14 @@ public class Voiture extends JPanel {
             setBorder(BorderFactory.createMatteBorder(largeurBorder, largeurBorder, largeurBorder, largeurBorder,
                     couleurBordure));
         }
+    }
+
+    private void stopChercher() {
+        chercher = false;
+        Color couleurBordure = null;
+        int largeurBorder = 3;
+        setBorder(BorderFactory.createMatteBorder(largeurBorder, largeurBorder, largeurBorder, largeurBorder,
+                couleurBordure));
     }
 
     private void premierArrangement() {
@@ -158,7 +170,7 @@ public class Voiture extends JPanel {
         Thread.sleep(structure.getVitesseMax());
         enlever();
         parking.addOccupation();
-        chercher = false;
+        stopChercher();
         Thread.sleep(random.nextInt(Parking.maxTemps));
 
         while (cellActuelle.estOccupe()) {

@@ -3,6 +3,8 @@ package components.BarreHaut;
 import java.awt.Color;
 
 import javax.swing.JPanel;
+
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
@@ -10,6 +12,9 @@ import javax.swing.JButton;
 
 import javax.swing.JLabel;
 import javax.swing.JTextField;
+
+import components.Ville.Ville;
+import components.Voiture.Voiture;
 
 public class BarreHaut extends JPanel {
     JTextField val1;
@@ -22,6 +27,7 @@ public class BarreHaut extends JPanel {
                         // gestionnaire et qu'on organisera les composantes de façon manuelle.
 
         val1 = new JTextField();
+        val1.setText(Voiture.getTauxRecherche() + "");
         start = new JButton("start");
         pause = new JButton("pause");
         reset = new JButton("reset");
@@ -50,59 +56,31 @@ public class BarreHaut extends JPanel {
         add(aj);
         add(en);
 
-        start.addMouseListener(new MouseListener() {
+        start.addMouseListener(new MouseAdapter() {
+            @Override
             public void mouseClicked(MouseEvent arg0) {
-                int num1 = Integer.parseInt(val1.getText());
-                lab2.setText("Le taux de recherche entré est de: " + (num1));
-            }
+                try {
+                    double nouvTaux = Double.parseDouble(val1.getText());
+                    Voiture.setTauxRecherche(nouvTaux);
+                    lab2.setText("Le taux de recherche entré est de: " + (Voiture.getTauxRecherche()));
+                } catch (Exception e) {
+                }
 
-            public void mouseEntered(MouseEvent arg0) {
-                // TODO Auto-generated method stub
-            }
+                if (Ville.getCirculationStatus())
+                    return;
 
-            @Override
-            public void mouseExited(MouseEvent arg0) {
-                // TODO Auto-generated method stub
+                if (Ville.getResetStatus()) {
+                    Ville.setResetStatus(false);
+                }
 
-            }
-
-            @Override
-            public void mousePressed(MouseEvent arg0) {
-                // TODO Auto-generated method stub
-
-            }
-
-            @Override
-            public void mouseReleased(MouseEvent arg0) {
-                // TODO Auto-generated method stub
-
+                Ville.setCirculationStatus(true);
             }
         });
-        pause.addMouseListener(new MouseListener() {
+
+        pause.addMouseListener(new MouseAdapter() {
+            @Override
             public void mouseClicked(MouseEvent arg0) {
-
-            }
-
-            public void mouseEntered(MouseEvent arg0) {
-                // TODO Auto-generated method stub
-            }
-
-            @Override
-            public void mouseExited(MouseEvent arg0) {
-                // TODO Auto-generated method stub
-
-            }
-
-            @Override
-            public void mousePressed(MouseEvent arg0) {
-                // TODO Auto-generated method stub
-
-            }
-
-            @Override
-            public void mouseReleased(MouseEvent arg0) {
-                // TODO Auto-generated method stub
-
+                Ville.setCirculationStatus(false);
             }
         });
         reset.addMouseListener(new MouseListener() {
