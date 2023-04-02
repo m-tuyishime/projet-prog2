@@ -3,6 +3,7 @@ package components.Ville.Intersection;
 import javax.swing.JPanel;
 
 import components.Cellule.CelluleIntersection;
+import components.Ville.Ville;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -23,6 +24,9 @@ public class FeuxCirculation extends JPanel {
     private Timer minuteur = new Timer();
     private TimerTask tache = new TimerTask() {
         public void run() {
+            if (!Ville.getCirculationStatus())
+                return;
+
             if (goX) {
                 goX = false;
                 goX();
@@ -52,7 +56,7 @@ public class FeuxCirculation extends JPanel {
         setOpaque(false);
         setLayout(new GridBagLayout());
         peupler();
-        minuteur.schedule(tache, 1000, vitesseFeux);
+        minuteur.schedule(tache, 0, vitesseFeux);
     }
 
     public void goY() {
@@ -62,6 +66,9 @@ public class FeuxCirculation extends JPanel {
         feuGauche.setState("SLOW");
         minuteur.schedule(new TimerTask() {
             public void run() {
+                if (!Ville.getCirculationStatus())
+                    return;
+
                 feuDroite.setState("STOP");
                 feuGauche.setState("STOP");
 
@@ -80,6 +87,9 @@ public class FeuxCirculation extends JPanel {
         feuBas.setState("SLOW");
         minuteur.schedule(new TimerTask() {
             public void run() {
+                if (!Ville.getCirculationStatus())
+                    return;
+
                 feuHaut.setState("STOP");
                 feuBas.setState("STOP");
 

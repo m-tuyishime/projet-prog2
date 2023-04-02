@@ -18,7 +18,7 @@ public class Ecran extends JFrame {
     // Création d'un nouveau JPanel pour la barre du haut avec la classe BarreHaut
     private static final JPanel barreHaut = new BarreHaut();
     // Recherche du JPanel avec la classe Ville
-    private static final Ville ville = new Ville();
+    private static Ville ville = new Ville();
 
     public Ecran() {
         super("Conduite"); // Appel du constructeur de la classe JFrame avec un titre pour la fenêtre
@@ -26,6 +26,10 @@ public class Ecran extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Fermeture de la fenêtre lorsqu'on clique sur la croix
         organiser();
         setVisible(true); // Affichage de la fenêtre
+    }
+
+    public static Ville getVille() {
+        return ville;
     }
 
     private void organiser() {

@@ -21,7 +21,8 @@ import serveur.Serveur;
 public class Voiture extends JPanel {
     private static Random random = new Random();
     // Taux de recherche d'un stationnement
-    private static double tauxRecherche = 1;
+    private static double tauxRecherche = 0;
+    private static int nombreVoitures = Ville.getNombreVoitures();
     private int nombreRotations = 0;
     private boolean chercher = false;
     private boolean uTurn = false;
@@ -37,18 +38,21 @@ public class Voiture extends JPanel {
     private int derniereDirection;
     private ArrayList<Structure> cheminParking;
 
-    public Voiture() {
-        Ville.setNombreVoitures(Ville.getNombreVoitures() + 1);
+    public Voiture() throws InterruptedException {
+        nombreVoitures++;
         setBackground(Color.BLACK);
         setPreferredSize(new Dimension(20, 30));
         Cellule.grid.setConstraints(this, Cellule.constraints);
 
         premierArrangement();
 
-        try {
-            circule();
-        } catch (InterruptedException e) {
-            System.out.println(e.getMessage());
+        circule();
+
+        nombreVoitures--;
+
+        if (nombreVoitures < Ville.getNombreVoitures()) {
+            Thread.sleep(3000);
+            new Voiture();
         }
     }
 
@@ -110,10 +114,15 @@ public class Voiture extends JPanel {
         if (cellSuivante instanceof CelluleIntersection)
             cellIntersection = (CelluleIntersection) cellSuivante;
 
-        while (cellSuivante.estOccupe()
-                || (cellIntersection != null && !cellIntersection.estGo() && !dansIntersection)) {
+        while (!Ville.getResetStatus() && (cellSuivante.estOccupe()
+                || (cellIntersection != null && !cellIntersection.estGo() && !dansIntersection))) {
             Thread.sleep(500);
             update();
+        }
+
+        if (Ville.getResetStatus()) {
+            enlever();
+            return;
         }
 
         chercherParking();
@@ -130,13 +139,7 @@ public class Voiture extends JPanel {
 
         Thread.sleep(structure.getVitesseMax());
 
-        if (Ville.getResetStatus()) {
-            enlever();
-            Ville.setNombreVoitures(Ville.getNombreVoitures() - 1);
-            return;
-        }
-
-        while (!Ville.getCirculationStatus()) {
+        while (!Ville.getCirculationStatus() && !Ville.getResetStatus()) {
             Thread.sleep(500);
         }
 
@@ -153,6 +156,10 @@ public class Voiture extends JPanel {
             circule();
 
         } else {
+            if (!chercher) {
+                enlever();
+                return;
+            }
             positionActuelle = Ville.getEntree(positionActuelle);
             circule();
         }
@@ -171,7 +178,12 @@ public class Voiture extends JPanel {
         enlever();
         parking.addOccupation();
         stopChercher();
-        Thread.sleep(random.nextInt(Parking.maxTemps));
+
+        int compteTemps = 0;
+        while (compteTemps < random.nextInt(3000, Parking.maxTemps) && !Ville.getResetStatus()) {
+            Thread.sleep(1);
+            compteTemps++;
+        }
 
         while (cellActuelle.estOccupe()) {
             Thread.sleep(500);

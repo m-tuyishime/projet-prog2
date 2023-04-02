@@ -6,7 +6,6 @@ import javax.swing.JPanel;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 
 import javax.swing.JButton;
 
@@ -18,7 +17,7 @@ import components.Voiture.Voiture;
 
 public class BarreHaut extends JPanel {
     JTextField val1;
-    JLabel lab1, lab2;
+    JLabel lab1, lab2, lab3;
     JButton start, pause, reset, aj, en;
 
     public BarreHaut() {
@@ -35,12 +34,15 @@ public class BarreHaut extends JPanel {
         en = new JButton("enlever voiture");
         lab1 = new JLabel("Veuillez entrer un taux de recherche:");
         lab2 = new JLabel("Le taux de recherche entré est de: 0");
+        lab3 = new JLabel("Nombre de voitures: 0");
         lab1.setForeground(Color.red);
         lab2.setForeground(Color.red);
+        lab3.setForeground(Color.red);
 
         lab1.setBounds(0, 0, 210, 30);
         val1.setBounds(210, 0, 30, 30);
         lab2.setBounds(0, 50, 300, 40);
+        lab3.setBounds(0, 100, 300, 40);
         start.setBounds(250, 0, 100, 40);
         pause.setBounds(250, 50, 100, 40);
         reset.setBounds(350, 0, 100, 40);
@@ -51,6 +53,7 @@ public class BarreHaut extends JPanel {
         add(start);
         add(lab1);
         add(lab2);
+        add(lab3);
         add(pause);
         add(reset);
         add(aj);
@@ -70,7 +73,11 @@ public class BarreHaut extends JPanel {
                     return;
 
                 if (Ville.getResetStatus()) {
+                    Ville.setNombreVoitures(Ville.getNombreVoitures() + 1);
+                    lab3.setText("Nombre de voitures: " + (Ville.getNombreVoitures()));
                     Ville.setResetStatus(false);
+
+                    nouvVoiture();
                 }
 
                 Ville.setCirculationStatus(true);
@@ -83,86 +90,48 @@ public class BarreHaut extends JPanel {
                 Ville.setCirculationStatus(false);
             }
         });
-        reset.addMouseListener(new MouseListener() {
+
+        reset.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent arg0) {
-
-            }
-
-            public void mouseEntered(MouseEvent arg0) {
-                // TODO Auto-generated method stub
-            }
-
-            @Override
-            public void mouseExited(MouseEvent arg0) {
-                // TODO Auto-generated method stub
-
-            }
-
-            @Override
-            public void mousePressed(MouseEvent arg0) {
-                // TODO Auto-generated method stub
-
-            }
-
-            @Override
-            public void mouseReleased(MouseEvent arg0) {
-                // TODO Auto-generated method stub
-
+                Ville.setResetStatus(true);
+                Ville.setCirculationStatus(false);
+                Ville.setNombreVoitures(0);
+                lab3.setText("Nombre de voitures: " + (Ville.getNombreVoitures()));
             }
         });
-        aj.addMouseListener(new MouseListener() {
+
+        aj.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent arg0) {
+                if (!Ville.getCirculationStatus() || Ville.getResetStatus())
+                    return;
 
-            }
-
-            public void mouseEntered(MouseEvent arg0) {
-                // TODO Auto-generated method stub
-            }
-
-            @Override
-            public void mouseExited(MouseEvent arg0) {
-                // TODO Auto-generated method stub
-
-            }
-
-            @Override
-            public void mousePressed(MouseEvent arg0) {
-                // TODO Auto-generated method stub
-
-            }
-
-            @Override
-            public void mouseReleased(MouseEvent arg0) {
-                // TODO Auto-generated method stub
-
+                Ville.setNombreVoitures(Ville.getNombreVoitures() + 1);
+                lab3.setText("Nombre de voitures: " + (Ville.getNombreVoitures()));
+                nouvVoiture();
             }
         });
-        en.addMouseListener(new MouseListener() {
+        en.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent arg0) {
+                if (Ville.getNombreVoitures() <= 0)
+                    return;
 
-            }
-
-            public void mouseEntered(MouseEvent arg0) {
-                // TODO Auto-generated method stub
-            }
-
-            @Override
-            public void mouseExited(MouseEvent arg0) {
-                // TODO Auto-generated method stub
-
-            }
-
-            @Override
-            public void mousePressed(MouseEvent arg0) {
-                // TODO Auto-generated method stub
-
-            }
-
-            @Override
-            public void mouseReleased(MouseEvent arg0) {
-                // TODO Auto-generated method stub
-
+                Ville.setNombreVoitures(Ville.getNombreVoitures() - 1);
+                lab3.setText("Nombre de voitures: " + (Ville.getNombreVoitures()));
             }
         });
+    }
+
+    private void nouvVoiture() {
+        Runnable runnable = new Runnable() {
+            public void run() {
+                try {
+                    new Voiture();
+                } catch (InterruptedException e) {
+                    System.out.println(e.getMessage());
+                }
+            }
+        };
+        Thread thread = new Thread(runnable);
+        thread.start();
     }
 }

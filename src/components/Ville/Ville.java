@@ -9,8 +9,8 @@ import components.Ville.Intersection.Intersection;
 
 public class Ville extends JPanel {
     // Si les voitures bougent
-    private static boolean circulation = true;
-    private static boolean reset = false;
+    private static boolean circulation = false;
+    private static boolean reset = true;
     private static int nombreVoitures = 0;
 
     public static final int nbLignes = 14;
@@ -127,7 +127,6 @@ public class Ville extends JPanel {
         new Parking(this, new Coordonnee(4, 1), "VERTICALE", new Color(123, 50, 250));
         new Parking(this, new Coordonnee(14, 10),
                 "VERTICALE", Color.PINK);
-        new Parking(this, new Coordonnee(0, 10), "VERTICALE", Color.BLUE);
         new Parking(this, new Coordonnee(11, 4), "HORIZONTALE", Color.ORANGE);
     }
 
