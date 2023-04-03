@@ -13,6 +13,11 @@ import java.awt.event.ComponentListener;
 public class Feu extends JPanel {
     private Color couleur = Color.RED;
 
+    public Feu(String state) {
+        this();
+        setFirstState(state);
+    }
+
     public Feu() {
         setOpaque(false);
         addComponentListener((ComponentListener) new ComponentAdapter() {
@@ -23,7 +28,7 @@ public class Feu extends JPanel {
         });
     }
 
-    public void setState(String state) {
+    public void setFirstState(String state) {
         switch (state) {
             case "GO":
                 couleur = Color.GREEN;
@@ -37,6 +42,10 @@ public class Feu extends JPanel {
             default:
                 throw new IllegalArgumentException("Le state doit être soit \"GO\", \"SLOW\" ou \"STOP\"");
         }
+    }
+
+    public void setState(String state) {
+        setFirstState(state);
         paintComponent(getGraphics());
     }
 

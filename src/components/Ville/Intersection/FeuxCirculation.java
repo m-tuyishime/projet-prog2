@@ -16,11 +16,11 @@ import java.util.TimerTask;
 public class FeuxCirculation extends JPanel {
     private int vitesseFeux = Intersection.vitesseMax * 8;
     private CelluleIntersection[][] cellules;
-    private Feu feuHaut = new Feu();
+    private Feu feuHaut = new Feu("GO");
     private Feu feuGauche = new Feu();
     private Feu feuDroite = new Feu();
-    private Feu feuBas = new Feu();
-    private boolean goX = false;
+    private Feu feuBas = new Feu("GO");
+    private boolean goX = true;
     private Timer minuteur = new Timer();
     private TimerTask tache = new TimerTask() {
         public void run() {
@@ -39,6 +39,8 @@ public class FeuxCirculation extends JPanel {
 
     public FeuxCirculation(Intersection intersection) {
         cellules = intersection.getCellules();
+        cellules[0][0].setGoStatus(true);
+        cellules[1][1].setGoStatus(true);
         // Met les feux de circulation au millieu de l'intersection
         intersection.addComponentListener((ComponentListener) new ComponentAdapter() {
             @Override
@@ -77,7 +79,7 @@ public class FeuxCirculation extends JPanel {
                 feuHaut.setState("GO");
                 feuBas.setState("GO");
             }
-        }, (4) * 1000);
+        }, 8 * 1000);
     }
 
     public void goX() {
@@ -98,7 +100,7 @@ public class FeuxCirculation extends JPanel {
                 feuDroite.setState("GO");
                 feuGauche.setState("GO");
             }
-        }, (4) * 1000);
+        }, 8 * 1000);
     }
 
     public void peupler() {
