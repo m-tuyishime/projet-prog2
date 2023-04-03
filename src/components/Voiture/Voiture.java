@@ -39,19 +39,23 @@ public class Voiture extends JPanel {
     private ArrayList<Structure> cheminParking;
 
     public Voiture() throws InterruptedException {
-        nombreVoitures++;
-        setBackground(Color.BLACK);
-        setPreferredSize(new Dimension(20, 30));
-        Cellule.grid.setConstraints(this, Cellule.constraints);
+        try {
+            nombreVoitures++;
+            setBackground(Color.BLACK);
+            setPreferredSize(new Dimension(20, 30));
+            Cellule.grid.setConstraints(this, Cellule.constraints);
 
-        premierArrangement();
+            premierArrangement();
 
-        circule();
+            circule();
 
-        nombreVoitures--;
+            nombreVoitures--;
 
-        if (nombreVoitures < Ville.getNombreVoitures()) {
-            Thread.sleep(3000);
+            if (nombreVoitures < Ville.getNombreVoitures()) {
+                Thread.sleep(3000);
+                new Voiture();
+            }
+        } catch (Exception e) {
             new Voiture();
         }
     }

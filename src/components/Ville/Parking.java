@@ -2,6 +2,10 @@ package components.Ville;
 
 import java.awt.Color;
 import java.awt.GridLayout;
+import java.util.Timer;
+import java.util.TimerTask;
+
+import javax.swing.BorderFactory;
 
 import components.Cellule.Cellule;
 import components.Cellule.CelluleParking;
@@ -13,6 +17,8 @@ public class Parking extends Structure {
     private int largeur = 2;
     private Color couleur;
     private static int capacite = 4;
+    private int reservations = 0;
+    private boolean libre = true;
     private int direction = 0;
 
     public Parking(Ville ville, Coordonnee startPosition, String orientation, Color couleur) {
@@ -22,6 +28,7 @@ public class Parking extends Structure {
         setLargeLongueur(largeur, longueur);
         setLayout(new GridLayout(getTailleY(), getTailleX()));
         construire();
+        updateLibreStatus();
     }
 
     public Color getCouleur() {
@@ -30,6 +37,49 @@ public class Parking extends Structure {
 
     public int getDirection() {
         return direction;
+    }
+
+    public boolean estLibre() {
+        return libre;
+    }
+
+    public int getReservations() {
+        return reservations;
+    }
+
+    public void setReservations(int nouvReservations) {
+        if (nouvReservations >= 0)
+            reservations = nouvReservations;
+    }
+
+    private void updateLibreStatus() {
+        TimerTask task = new TimerTask() {
+            @Override
+            public void run() {
+                if (occupation >= capacite) {
+                    libre = false;
+                    int largeurBorder = 4;
+                    setBorder(
+                            BorderFactory.createMatteBorder(largeurBorder, largeurBorder, largeurBorder, largeurBorder,
+                                    Color.RED));
+                } else if (occupation + reservations >= capacite) {
+                    libre = false;
+                    int largeurBorder = 4;
+                    setBorder(
+                            BorderFactory.createMatteBorder(largeurBorder, largeurBorder, largeurBorder, largeurBorder,
+                                    Color.YELLOW));
+                } else {
+                    libre = true;
+                    int largeurBorder = 4;
+                    setBorder(
+                            BorderFactory.createMatteBorder(largeurBorder, largeurBorder, largeurBorder, largeurBorder,
+                                    Color.GREEN));
+                }
+            }
+        };
+
+        Timer timer = new Timer();
+        timer.schedule(task, 0, 500);
     }
 
     @Override

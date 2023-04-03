@@ -11,7 +11,7 @@ import components.Ville.Structure;
 import components.Ville.Ville;
 
 public class Serveur {
-    private Color couleurParking;
+    private Parking parkingTrouve;
     private ArrayList<Parking> parkingsTrouves;
     private int startDirection;
 
@@ -22,11 +22,17 @@ public class Serveur {
     public ArrayList<Structure> getCheminParking(Coordonnee position, int startDirection) {
         // nettoie les variables de la derniere recherche
         parkingsTrouves = new ArrayList<Parking>();
-        couleurParking = null;
+        if (parkingTrouve != null) {
+            // enleve la derniere reservation
+            parkingTrouve.setReservations(parkingTrouve.getReservations() - 1);
+            parkingTrouve = null;
+        }
         this.startDirection = startDirection;
 
         ArrayList<Structure> chemin = new ArrayList<Structure>();
-        return checkCellSuivantes(position, chemin);
+        ArrayList<Structure> nouvChemin = checkCellSuivantes(position, chemin);
+        parkingTrouve.setReservations(parkingTrouve.getReservations() + 1);
+        return nouvChemin;
     }
 
     private ArrayList<Structure> checkCellSuivantes(Coordonnee position, ArrayList<Structure> dernierChemin) {
@@ -52,12 +58,12 @@ public class Serveur {
         if (structure.getParkings().size() > 0) {
             for (Parking parking : structure.getParkings()) {
                 // Si le parking n'a pas deja ete trouve plus que 2 fois
-                if (Collections.frequency(parkingsTrouves, parking) < 2) {
+                if (Collections.frequency(parkingsTrouves, parking) < 2 && parking.estLibre()) {
                     parkingsTrouves.add(parking);
-                    couleurParking = parking.getCouleur();
+                    parkingTrouve = parking;
+                    return nouvChemin;
                 }
             }
-            return nouvChemin;
         }
 
         int startXActuelle = structure.getStartIndexCellX();
@@ -198,7 +204,7 @@ public class Serveur {
             if (score < meilleurScore) {
                 meilleurScore = score;
                 meilleurChemin = chemin;
-                couleurParking = chemin.get(chemin.size() - 1).getParkings().get(0).getCouleur();
+                parkingTrouve = chemin.get(chemin.size() - 1).getParkings().get(0);
             }
         }
 
@@ -237,6 +243,6 @@ public class Serveur {
     }
 
     public Color getCouleurParking() {
-        return couleurParking;
+        return parkingTrouve.getCouleur();
     }
 }
