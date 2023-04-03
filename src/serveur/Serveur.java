@@ -19,6 +19,7 @@ public class Serveur {
 
     }
 
+    // La methode qui retourne le chemin le plus court vers un parking
     public ArrayList<Structure> getCheminParking(Coordonnee position, int startDirection) {
         // nettoie les variables de la derniere recherche
         parkingsTrouves = new ArrayList<Parking>();
@@ -29,12 +30,18 @@ public class Serveur {
         }
         this.startDirection = startDirection;
 
+        // Cherche le chemin le plus court vers un parking
         ArrayList<Structure> chemin = new ArrayList<Structure>();
         ArrayList<Structure> nouvChemin = checkCellSuivantes(position, chemin);
+
+        // reserve le parking trouvé
         parkingTrouve.setReservations(parkingTrouve.getReservations() + 1);
+
+        // retourne le chemin le plus court
         return nouvChemin;
     }
 
+    // Methode recursive qui cherche le chemin le plus court vers un parking
     private ArrayList<Structure> checkCellSuivantes(Coordonnee position, ArrayList<Structure> dernierChemin) {
         // Si la position est null ou on a deja trouve plus que 8 parkings
         if (position == null || parkingsTrouves.size() > 8)

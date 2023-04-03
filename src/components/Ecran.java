@@ -14,6 +14,7 @@ import components.Ville.Ville;
 public class Ecran extends JFrame {
     // Définition du layout de la fenêtre avec le GridBagLayout
     private GridBagLayout grid = new GridBagLayout();
+    // Définition de la taille de l'écran avec la classe Toolkit
     private Dimension tailleEcran = Toolkit.getDefaultToolkit().getScreenSize();
     // Création d'un nouveau JPanel pour la barre du haut avec la classe BarreHaut
     private static final JPanel barreHaut = new BarreHaut();
@@ -23,8 +24,10 @@ public class Ecran extends JFrame {
     public Ecran() {
         super("Conduite"); // Appel du constructeur de la classe JFrame avec un titre pour la fenêtre
         setSize(1100, 900); // Définition de la taille de la fenêtre
+        // Définition de la taille de la fenêtre en fonction de la taille de l'écran
+        // setSize(tailleEcran.height, tailleEcran.height - 100);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Fermeture de la fenêtre lorsqu'on clique sur la croix
-        organiser();
+        organiser(); // Appel de la méthode organiser
         setVisible(true); // Affichage de la fenêtre
     }
 
@@ -33,6 +36,7 @@ public class Ecran extends JFrame {
     }
 
     private void organiser() {
+        // Définition du layout de la fenêtre avec le GridBagLayout
         setLayout(grid);
 
         // Création des contraintes pour la première ligne

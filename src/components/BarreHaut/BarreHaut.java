@@ -25,8 +25,8 @@ public class BarreHaut extends JPanel {
         setLayout(null);// Organisation des composantes. En envoyant null on dit qu'il n'y aura pas de
                         // gestionnaire et qu'on organisera les composantes de façon manuelle.
 
+        // Création des composantes
         val1 = new JTextField();
-        val1.setText(Voiture.getTauxRecherche() + "");
         start = new JButton("start");
         pause = new JButton("pause");
         reset = new JButton("reset");
@@ -35,10 +35,14 @@ public class BarreHaut extends JPanel {
         lab1 = new JLabel("Veuillez entrer un taux de recherche:");
         lab2 = new JLabel("Le taux de recherche entré est de: 0");
         lab3 = new JLabel("Nombre de voitures: 0");
+
+        // Modification des composantes
+        val1.setText(Voiture.getTauxRecherche() + "");
         lab1.setForeground(Color.red);
         lab2.setForeground(Color.red);
         lab3.setForeground(Color.red);
 
+        // Definition des positions des composantes
         lab1.setBounds(0, 0, 210, 30);
         val1.setBounds(210, 0, 30, 30);
         lab2.setBounds(0, 50, 300, 40);
@@ -49,6 +53,7 @@ public class BarreHaut extends JPanel {
         aj.setBounds(500, 0, 200, 40);
         en.setBounds(500, 50, 200, 40);
 
+        // Ajout des composantes
         add(val1);
         add(start);
         add(lab1);
@@ -59,31 +64,38 @@ public class BarreHaut extends JPanel {
         add(aj);
         add(en);
 
+        // Ajout des listeners des clics
         start.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent arg0) {
+                // On vérifie que le taux entré est bien un double
                 try {
+                    // On récupère le taux entré et on l'affiche
                     double nouvTaux = Double.parseDouble(val1.getText());
                     Voiture.setTauxRecherche(nouvTaux);
                     lab2.setText("Le taux de recherche entré est de: " + (Voiture.getTauxRecherche()));
                 } catch (Exception e) {
                 }
 
+                // On vérifie que la circulation est en cours
                 if (Ville.getCirculationStatus())
                     return;
 
+                // On vérifie que le reset n'est pas en cours
                 if (Ville.getResetStatus()) {
+                    // On crée une voiture et on remet le reset à false
                     Ville.setNombreVoitures(Ville.getNombreVoitures() + 1);
                     lab3.setText("Nombre de voitures: " + (Ville.getNombreVoitures()));
                     Ville.setResetStatus(false);
 
                     nouvVoiture();
                 }
-
+                // On relance la circulation
                 Ville.setCirculationStatus(true);
             }
         });
 
+        // On met la circulation en pause
         pause.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent arg0) {
@@ -91,6 +103,7 @@ public class BarreHaut extends JPanel {
             }
         });
 
+        // On envoie un signal de reset aux voitures
         reset.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent arg0) {
                 Ville.setResetStatus(true);
@@ -100,8 +113,10 @@ public class BarreHaut extends JPanel {
             }
         });
 
+        // On ajoute une voiture
         aj.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent arg0) {
+                // On vérifie que la circulation est en cours ou que le reset est en cours
                 if (!Ville.getCirculationStatus() || Ville.getResetStatus())
                     return;
 
@@ -110,8 +125,11 @@ public class BarreHaut extends JPanel {
                 nouvVoiture();
             }
         });
+
+        // On enlève une voiture
         en.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent arg0) {
+                // On vérifie que le nombre de voitures est supérieur à 0
                 if (Ville.getNombreVoitures() <= 0)
                     return;
 
@@ -121,9 +139,11 @@ public class BarreHaut extends JPanel {
         });
     }
 
+    // On crée une nouvelle voiture
     private void nouvVoiture() {
         Runnable runnable = new Runnable() {
             public void run() {
+                // On essaie de créer une voiture
                 try {
                     new Voiture();
                 } catch (InterruptedException e) {
@@ -131,6 +151,7 @@ public class BarreHaut extends JPanel {
                 }
             }
         };
+        // On lance la voiture dans un nouveau thread
         Thread thread = new Thread(runnable);
         thread.start();
     }
