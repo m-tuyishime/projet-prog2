@@ -1,14 +1,12 @@
 package components.Ville;
 
+// Classe qui représente une coordonnée dans la ville
 public class Coordonnee {
     private int positionX;
     private int positionY;
 
-    public Coordonnee(Coordonnee coordonnee) {
-        new Coordonnee(coordonnee.getX(), getY());
-    }
-
     public Coordonnee(int x, int y) {
+        // vérifie que les coordonnées sont valides
         if (x >= Ville.nbColonnes)
             throw new IllegalArgumentException("La variable x dépasse la largeur de la ville");
         else if (y >= Ville.nbLignes)
@@ -16,6 +14,8 @@ public class Coordonnee {
 
         if (x < 0 || y < 0)
             throw new IllegalArgumentException("Les variables x et y doivent être positives");
+
+        // initialise les coordonnées
         positionX = x;
         positionY = y;
     }
@@ -28,6 +28,7 @@ public class Coordonnee {
         return positionY;
     }
 
+    // permet de comparer deux coordonnées par leur position x et y
     @Override
     public boolean equals(Object obj) {
         if (obj == this) {

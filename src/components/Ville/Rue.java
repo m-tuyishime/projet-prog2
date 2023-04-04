@@ -7,6 +7,7 @@ import javax.swing.BorderFactory;
 
 import components.Cellule.CelluleRue;
 
+// Classe qui représente une rue
 public class Rue extends Structure {
 
     public Rue(Ville ville, Coordonnee startPosition, int longueur, String orientation) {
@@ -17,13 +18,17 @@ public class Rue extends Structure {
         construire();
     }
 
+    // Redéfini la méthode qui crée les cellules
+    // qui composent la rue
     @Override
     protected void peupler() {
         Coordonnee position;
+        // Loop pour créer les cellules dans la rue
         for (int y = 0; y < getTailleY(); y++) {
             for (int x = 0; x < getTailleX(); x++) {
                 int direction = 0;
 
+                // calcul la position des lignes de délimitation de la voie de la rue
                 int tailleBordureCell = 2;
                 int cellBordureDroite = 0, cellBordureGauche = 0, cellBordureHaut = 0, cellBordureBas = 0;
                 if (getOrientation() == "VERTICALE") {
@@ -52,13 +57,17 @@ public class Rue extends Structure {
                     }
                 }
 
+                // Création de la cellule
                 position = new Coordonnee(getStartIndexCellX() + x, getStartIndexCellY() + y);
                 CelluleRue cellule = new CelluleRue(this, position, direction);
 
+                // Ajout de la ligne de délimitation de la voie de la rue
                 cellule.setBorder(BorderFactory.createMatteBorder(cellBordureHaut, cellBordureGauche, cellBordureBas,
                         cellBordureDroite,
                         Color.WHITE));
+                // Ajout de la cellule à la rue
                 add(cellule);
+                // Ajout de la cellule à grille de la ville
                 Ville.setCellule(position, cellule);
             }
         }

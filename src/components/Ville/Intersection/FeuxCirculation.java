@@ -13,23 +13,34 @@ import java.awt.event.ComponentListener;
 import java.util.Timer;
 import java.util.TimerTask;
 
+// Classe qui représente les feux de circulation
 public class FeuxCirculation extends JPanel {
+    // La vitesse des feux de circulation
     private int vitesseFeux = Intersection.vitesseMax * 8;
+    // La grille de cellules de l'intersection
     private CelluleIntersection[][] cellules;
+    // Les feux de circulation
     private Feu feuHaut = new Feu("GO");
     private Feu feuGauche = new Feu();
     private Feu feuDroite = new Feu();
     private Feu feuBas = new Feu("GO");
+    // Si les feux de circulation verticaux sont vert
     private boolean goX = true;
+    // Le minuteur qui gère les feux de circulation
     private Timer minuteur = new Timer();
+    // La tâche qui gère les feux de circulation
     private TimerTask tache = new TimerTask() {
         public void run() {
+            // Si la circulation est arrêtée, on arrête la tâche
             if (!Ville.getCirculationStatus())
                 return;
 
+            // Si les feux de circulation verticaux sont vert
+            // on les fait passer au rouge
             if (goX) {
                 goX = false;
                 goX();
+                // Sinon on les fait passer au vert
             } else {
                 goX = true;
                 goY();
@@ -41,7 +52,8 @@ public class FeuxCirculation extends JPanel {
         cellules = intersection.getCellules();
         cellules[0][0].setGoStatus(true);
         cellules[1][1].setGoStatus(true);
-        // Met les feux de circulation au millieu de l'intersection
+        // Met les feux de circulation au millieu de l'intersection et
+        // le redimensionne selon la taille de l'intersection
         intersection.addComponentListener((ComponentListener) new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {
@@ -58,9 +70,11 @@ public class FeuxCirculation extends JPanel {
         setOpaque(false);
         setLayout(new GridBagLayout());
         peupler();
+        // On démarre les feux de circulation
         minuteur.schedule(tache, 0, vitesseFeux);
     }
 
+    // Fait passer les feux de circulation verticaux au vert
     public void goY() {
         cellules[0][1].setGoStatus(false);
         cellules[1][0].setGoStatus(false);
@@ -82,6 +96,7 @@ public class FeuxCirculation extends JPanel {
         }, 8 * 1000);
     }
 
+    // Fait passer les feux de circulation horizontales au vert
     public void goX() {
         cellules[0][0].setGoStatus(false);
         cellules[1][1].setGoStatus(false);
@@ -103,6 +118,7 @@ public class FeuxCirculation extends JPanel {
         }, 8 * 1000);
     }
 
+    // organise les feux de circulation dans la grille
     public void peupler() {
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 1;

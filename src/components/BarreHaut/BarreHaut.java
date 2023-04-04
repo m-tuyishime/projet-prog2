@@ -15,6 +15,7 @@ import javax.swing.JTextField;
 import components.Ville.Ville;
 import components.Voiture.Voiture;
 
+// Classe qui représente la barre du haut
 public class BarreHaut extends JPanel {
     JTextField val1;
     JLabel lab1, lab2, lab3;

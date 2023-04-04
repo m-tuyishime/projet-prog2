@@ -7,6 +7,7 @@ import java.awt.Color;
 import components.Cellule.Cellule;
 import components.Ville.Intersection.Intersection;
 
+// Classe qui représente la ville
 public class Ville extends JPanel {
     // Si la circulation est en cours ou non
     private static boolean circulation = false;

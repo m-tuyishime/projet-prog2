@@ -10,6 +10,7 @@ import components.Ville.Parking;
 import components.Ville.Structure;
 import components.Ville.Ville;
 
+// Classe qui représente le serveur
 public class Serveur {
     private Parking parkingTrouve;
     private ArrayList<Parking> parkingsTrouves;
@@ -47,12 +48,17 @@ public class Serveur {
         if (position == null || parkingsTrouves.size() > 8)
             return null;
 
+        // cherche la cellule a la position actuelle
         Cellule cellActuelle = Ville.getCellule(position);
 
+        // Si la cellule est null
         if (cellActuelle == null)
             return null;
 
+        // Cherche la structure dont la cellule fait partie
         Structure structure = cellActuelle.getStructure();
+
+        // Crée un nouveau tableau de chemins et y ajoute le dernier chemin
         ArrayList<Structure> nouvChemin = new ArrayList<Structure>(dernierChemin);
 
         nouvChemin.add(structure);
@@ -73,50 +79,63 @@ public class Serveur {
             }
         }
 
+        // les positions de la structure actuelle
         int startXActuelle = structure.getStartIndexCellX();
         int startYActuelle = structure.getStartIndexCellY();
 
+        // Crée un tableau de chemins menant a un parking
         ArrayList<Structure>[] cheminsPossible = new ArrayList[4];
 
         Coordonnee coordonnee;
 
-        // Regarde en haut
+        // Rajoute les chemins qui vont vers le haut de la structure actuelle
         coordonnee = coordonneeAdjacente(startXActuelle, startYActuelle, -1, "Y");
         cheminsPossible[2] = checkCellSuivantes(coordonnee, nouvChemin);
-        // Regarde a droite
+
+        // Rajoute les chemins qui vont vers la droite de la structure actuelle
         coordonnee = coordonneeAdjacente(startXActuelle, startYActuelle, structure.getTailleX(), "X");
         cheminsPossible[0] = checkCellSuivantes(coordonnee, nouvChemin);
 
-        // Regarde a gauche
+        // Rajoute les chemins qui vont vers la gauche de la structure actuelle
         coordonnee = coordonneeAdjacente(startXActuelle, startYActuelle, -1, "X");
         cheminsPossible[1] = checkCellSuivantes(coordonnee, nouvChemin);
 
-        // Regarde en bas
+        // Rajoute les chemins qui vont vers le bas de la structure actuelle
         coordonnee = coordonneeAdjacente(startXActuelle, startYActuelle, structure.getTailleY(), "Y");
         cheminsPossible[3] = checkCellSuivantes(coordonnee, nouvChemin);
 
+        // Les variables pour calculer le meilleur chemin
         Double meilleurScore = Double.MAX_VALUE;
         ArrayList<Structure> meilleurChemin = null;
 
+        // Calcule le meilleur chemin parmis les chemins possibles
         for (ArrayList<Structure> chemin : cheminsPossible) {
+            // Si le chemin est null
             if (chemin == null)
                 continue;
 
-            // poids
+            // le score du chemin actuel
             double score = 0;
+            // les poids pour calculer le score
             final double poidsLongueur = 0.5;
             final double poidsVirage = 0.2;
             final double poidsAutresVoitures = 0.3;
 
+            // loop sur les structures du chemin
             for (int i = 0; i < chemin.size(); i++) {
+                // la structure actuelle
                 structure = chemin.get(i);
+
+                // Si c'est la derniere structure du chemin
                 if (structure == chemin.get(chemin.size() - 1)) {
-                    // Calcule si il ya des virages dans le chemin
+                    // Calcule si il ya eu des virages dans le chemin
                     Parking parking = structure.getParkings().get(0);
                     score += Math.abs(parking.getDirection() - startDirection) * poidsVirage;
 
                     // Calcule la distance vers le parking depuis le debut de la derniere structure
                     // (rue) dans le chemin
+
+                    // Les variables pour calculer la distance
                     Structure derniereStructure = chemin.get(chemin.size() - 2);
                     int distanceParking = 0;
                     int structureStartX = structure.getStartIndexCellX();
@@ -208,6 +227,7 @@ public class Serveur {
                 score += structure.getOccupation() * poidsAutresVoitures;
             }
 
+            // Si le score du chemin actuel est meilleur que le meilleur score
             if (score < meilleurScore) {
                 meilleurScore = score;
                 meilleurChemin = chemin;
@@ -218,6 +238,7 @@ public class Serveur {
         return meilleurChemin;
     }
 
+    // Retourne la direction de la structure suivante
     private static Coordonnee coordonneeAdjacente(int startXActuelle, int startYActuelle, int addition,
             String ajouterA) {
         Coordonnee coordonnee;
@@ -249,6 +270,7 @@ public class Serveur {
         return coordonnee;
     }
 
+    // Retourne la couleur du parking trouvé
     public Color getCouleurParking() {
         return parkingTrouve.getCouleur();
     }

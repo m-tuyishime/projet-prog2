@@ -11,6 +11,7 @@ import java.awt.Toolkit;
 import components.BarreHaut.BarreHaut;
 import components.Ville.Ville;
 
+// Classe qui représente l'écran de l'application
 public class Ecran extends JFrame {
     // Définition du layout de la fenêtre avec le GridBagLayout
     private GridBagLayout grid = new GridBagLayout();

@@ -10,14 +10,17 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 
+// Classe qui représente un feu de circulation
 public class Feu extends JPanel {
     private Color couleur = Color.RED;
 
+    // Constructeur qui prend initialise directement la couleur du feu
     public Feu(String state) {
         this();
         setFirstState(state);
     }
 
+    // Constructeur par défaut
     public Feu() {
         setOpaque(false);
         addComponentListener((ComponentListener) new ComponentAdapter() {
@@ -28,6 +31,7 @@ public class Feu extends JPanel {
         });
     }
 
+    // Change la couleur du feu dependant de l'état
     public void setFirstState(String state) {
         switch (state) {
             case "GO":
@@ -44,11 +48,13 @@ public class Feu extends JPanel {
         }
     }
 
+    // Change la couleur du feu et le redessine
     public void setState(String state) {
         setFirstState(state);
         paintComponent(getGraphics());
     }
 
+    // Dessine le cercle de couleur qui représente le feu
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
