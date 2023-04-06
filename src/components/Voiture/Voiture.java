@@ -76,12 +76,13 @@ public class Voiture extends JPanel {
 
             // Si le nombre de voiture locales est inférieur au nombre de voitures dans la
             // ville
-            // on crée une nouvelle voiture
+            // on crée une nouvelle voiture après un délai aléatoire
             if (nombreVoitures < Ville.getNombreVoitures()) {
-                Thread.sleep(3000);
+                Thread.sleep(3000 + random.nextInt(5000));
                 new Voiture();
             }
         } catch (Exception e) {
+            enlever();
             new Voiture();
         }
     }
@@ -164,13 +165,20 @@ public class Voiture extends JPanel {
         CelluleIntersection cellIntersection = null;
         if (cellSuivante instanceof CelluleIntersection)
             cellIntersection = (CelluleIntersection) cellSuivante;
+        else
+            // On essaye de chercher un stationnement
+            chercherParking();
 
         // On fait dormir la voiture si la ville est en pause ou
         // la nouvelle cellule est occupée ou
-        // est une intersection qui n'a pas le feu vert
+        // est une intersection qui n'a pas le feu vert ou qui a plus d'une voiture
+
         // On sort de la boucle si la ville est en train de reset
-        while (!Ville.getResetStatus() && (cellSuivante.estOccupe()
-                || (cellIntersection != null && !cellIntersection.estGo() && !dansIntersection))) {
+        while (!Ville.getResetStatus() &&
+                (cellSuivante.estOccupe() ||
+                        (cellIntersection != null && !dansIntersection &&
+                                (!cellIntersection.estGo() ||
+                                        cellIntersection.getStructure().getOccupation() > 0)))) {
             Thread.sleep(500);
             update();
         }
@@ -181,9 +189,6 @@ public class Voiture extends JPanel {
             enlever();
             return;
         }
-
-        // On essaye de chercher un stationnement
-        chercherParking();
 
         // On enlève la voiture de la dernière cellule
         enlever();
@@ -274,12 +279,6 @@ public class Voiture extends JPanel {
             compteTemps++;
         }
 
-        // Si la cellule à la sortie du parking est occupée
-        while (cellActuelle.estOccupe()) {
-            // on attend
-            Thread.sleep(500);
-        }
-
         // On ajoute la voiture à la cellule de sortie du parking
         ajouter();
 
@@ -325,8 +324,20 @@ public class Voiture extends JPanel {
         int randomDirection;
         if (dansIntersection)
             randomDirection = random.nextInt(2);
-        else
-            randomDirection = random.nextInt(3);
+        else {
+            int pourcentage = random.nextInt(10);
+
+            // si le nombre aléatoire est inférieur à 1, renvoie 0 avec 10 % de chance
+            if (pourcentage < 1) {
+                randomDirection = 0;
+            } else if (pourcentage < 6) {
+                // si le nombre aléatoire est compris entre 1 et 5, renvoie 1
+                randomDirection = 1;
+            } else {
+                // si le nombre aléatoire est compris entre 6 et 9, renvoie 2
+                randomDirection = 2;
+            }
+        }
 
         // Fait un uTurn selon l'assignement de la variable uTurn
         if (uTurn && dansIntersection) {
@@ -490,6 +501,14 @@ public class Voiture extends JPanel {
 
     // Ajoute la voiture à la cellule actuelle
     private void ajouter() throws InterruptedException {
+        // Si la cellule est occupée
+        while (cellActuelle.estOccupe()) {
+            // Si la ville est en train de reset
+            if (Ville.getResetStatus())
+                return;
+            // on attend
+            Thread.sleep(500);
+        }
         cellActuelle.setOccupe(true);
         cellActuelle.add(this);
         update();

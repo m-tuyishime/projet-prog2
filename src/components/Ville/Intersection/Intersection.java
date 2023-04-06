@@ -2,6 +2,7 @@ package components.Ville.Intersection;
 
 import java.awt.Color;
 import java.awt.GridLayout;
+import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -21,8 +22,8 @@ public class Intersection extends Structure {
     public static final int largeur = 2;
     // le panneau qui contient les cellules de l'intersection
     private JPanel arrierePlan;
-    // la grille de cellules de l'intersection
-    private CelluleIntersection[][] cellules = new CelluleIntersection[largeur][largeur];
+    // tableau de cellules de l'intersection
+    private ArrayList<CelluleIntersection> cellules = new ArrayList<CelluleIntersection>();
 
     public Intersection(Ville ville, Coordonnee startPosition) {
         super(ville, startPosition);
@@ -41,7 +42,7 @@ public class Intersection extends Structure {
         construire();
     }
 
-    public CelluleIntersection[][] getCellules() {
+    public ArrayList<CelluleIntersection> getCellules() {
         return cellules;
     }
 
@@ -103,7 +104,7 @@ public class Intersection extends Structure {
                         y);
                 CelluleIntersection cellule = new CelluleIntersection(this, position, 0);
                 arrierePlan.add(cellule);
-                cellules[y][x] = cellule;
+                cellules.add(cellule);
                 Ville.setCellule(position, cellule);
             }
         }
